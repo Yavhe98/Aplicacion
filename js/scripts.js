@@ -25,52 +25,51 @@ window.addEventListener('DOMContentLoaded', event => {
 
 });
 
+mapboxgl.accessToken = "pk.eyJ1IjoieWF2aGU5OCIsImEiOiJjbGl2bjY1NWowanh0M2RvMmc2OGRzMGMzIn0.SIOffeHb6HvNhYFtwxmn7g";
 
-mapboxGl.accessToken = "pk.eyJ1IjoieWF2aGU5OCIsImEiOiJjbGl2bjY1NWowanh0M2RvMmc2OGRzMGMzIn0.SIOffeHb6HvNhYFtwxmn7g";
-
-var map = new mapboxGl.Map({
+var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/dark-v9',
     hash: true,
     center: [-3.614042, 37.202174],
     pitch: 45,
-    zoom: 15.5
+    zoom: 10.5
 })
-// eslint-disable-next-line no-undef
+/* eslint-disable-next-line no-undef
 const tb = (window.tb = new Threebox(
     map,
     map.getCanvas().getContext('webgl'),
     {
-    defaultLights: true
+        defaultLights: true
     }
     ));
      
     map.on('style.load', () => {
-    map.addLayer({
-    id: 'custom-threebox-model',
-    type: 'custom',
-    renderingMode: '3d',
-    onAdd: function () {
-    // Creative Commons License attribution:  Metlife Building model by https://sketchfab.com/NanoRay
-    // https://sketchfab.com/3d-models/metlife-building-32d3a4a1810a4d64abb9547bb661f7f3
-    const scale = 3.2;
-    const options = {
-    obj: 'https://docs.mapbox.com/mapbox-gl-js/assets/metlife-building.gltf',
-    type: 'gltf',
-    scale: { x: scale, y: scale, z: 2.7 },
-    units: 'meters',
-    rotation: { x: 90, y: -90, z: 0 }
-    };
-     
-    tb.loadObj(options, (model) => {
-    model.setCoords([-73.976799, 40.754145]);
-    model.setRotation({ x: 0, y: 0, z: 241 });
-    tb.add(model);
-    });
-    },
-     
-    render: function () {
-    tb.update();
-    }
-    });
-    });
+        map.addLayer({
+            id: 'custom-threebox-model',
+            type: 'custom',
+            renderingMode: '3d',
+            onAdd: function () {
+                // Creative Commons License attribution:  Metlife Building model by https://sketchfab.com/NanoRay
+                // https://sketchfab.com/3d-models/metlife-building-32d3a4a1810a4d64abb9547bb661f7f3
+                const scale = 3.2;
+                const options = {
+                obj: 'https://docs.mapbox.com/mapbox-gl-js/assets/metlife-building.gltf',
+                type: 'gltf',
+                scale: { x: scale, y: scale, z: 2.7 },
+                units: 'meters',
+                rotation: { x: 90, y: -90, z: 0 }
+                };
+                
+                tb.loadObj(options, (model) => {
+                    model.setCoords([-3.614042, 37.202174]);
+                    model.setRotation({ x: 0, y: 0, z: 241 });
+                    tb.add(model);
+                });
+            },
+            
+            render: function () {
+                tb.update();
+            }
+        });
+    });*/
