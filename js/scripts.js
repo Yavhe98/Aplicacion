@@ -28,12 +28,12 @@ window.addEventListener('DOMContentLoaded', event => {
 mapboxgl.accessToken = "pk.eyJ1IjoieWF2aGU5OCIsImEiOiJjbGl2bjY1NWowanh0M2RvMmc2OGRzMGMzIn0.SIOffeHb6HvNhYFtwxmn7g";
 
 var map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/dark-v9',
+    container: 'map',   // id del container en html
+    style: 'mapbox://styles/mapbox/dark-v9', // stylesheet location
     hash: true,
-    center: [-3.614042, 37.202174],
-    pitch: 45,
-    zoom: 10.5
+    center: [-3.614042, 37.202174], // Vista inicial (lat,lon)
+    pitch: 45,  // Grados de inclinación
+    zoom: 15.5  // Zoom inicial
 })
 /* eslint-disable-next-line no-undef
 const tb = (window.tb = new Threebox(
