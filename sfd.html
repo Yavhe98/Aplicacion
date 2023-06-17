@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Selector de Rango de Fechas</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <style>
+    #slider-range {
+      width: 80%;
+      margin: 20px auto;
+    }
+  </style>
+</head>
+<body>
+  <label for="fecha-inicio">Fecha de inicio:</label>
+  <input type="text" id="fecha-inicio" name="fecha-inicio">
+
+  <label for="fecha-fin">Fecha de fin:</label>
+  <input type="text" id="fecha-fin" name="fecha-fin">
+
+  <div id="slider-range"></div>
+
+  <script>
+    $(document).ready(function() {
+      var dateFormat = "yy-mm-dd";
+      var startDate = new Date(2022, 0, 1);
+      var endDate = new Date(2022, 11, 31);
+
+      $("#fecha-inicio").datepicker({
+        dateFormat: dateFormat,
+        defaultDate: startDate,
+        onSelect: function(selectedDate) {
+          $("#slider-range").slider("values", 0, selectedDate);
+        }
+      });
+
+      $("#fecha-fin").datepicker({
+        dateFormat: dateFormat,
+        defaultDate: endDate,
+        onSelect: function(selectedDate) {
+          $("#slider-range").slider("values", 1, selectedDate);
+        }
+      });
+
+      $("#slider-range").slider({
+        range: true,
+        min: startDate.getTime(),
+        max: endDate.getTime(),
+        values: [startDate.getTime(), endDate.getTime()],
+        slide: function(event, ui) {
+          var minDate = new Date(ui.values[0]);
+          var maxDate = new Date(ui.values[1]);
+
+          $("#fecha-inicio").datepicker("setDate", minDate);
+          $("#fecha-fin").datepicker("setDate", maxDate);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+
+
+<!--
+  En este ejemplo, utilizamos la biblioteca jQuery UI para crear un control deslizante con dos "slicers". Los campos de fecha "Fecha de inicio" y "Fecha de fin" están vinculados a los "slicers" y se actualizan automáticamente cuando se cambia la posición de los "slicers".
+
+Hemos creado un elemento <div> con el ID "slider-range" que será nuestro control deslizante. Utilizamos estilos CSS para establecer su ancho y margen.
+
+Dentro del bloque <script>, inicializamos los campos de fecha utilizando el método datepicker() de jQuery UI, de manera similar al ejemplo anterior. Establecemos el formato de fecha deseado y utilizamos las opciones defaultDate para establecer las fechas de inicio y fin predeterminadas.
+
+A continuación, creamos el control deslizante utilizando el método slider() de jQuery UI. Configuramos las opciones range para permitir seleccionar un rango de valores, min y max para establecer los valores mínimos y máximos permitidos, y values para establecer los valores iniciales.
+
+En la función slide, actualizamos los campos de fecha utilizando el método setDate de datepicker() en función de los valores seleccionados en el control deslizante.
+
+Ten en cuenta que en este ejemplo se han establecido fechas de inicio y fin predeterminadas para ilustrar el funcionamiento del selector de rango de fechas. Puedes ajustar esas fechas según tus necesidades.
+
+Espero que esto sea útil para crear un selector de rango de fechas utilizando una barra con dos "slicers". Si tienes alguna otra pregunta, no dudes en preguntar.
+-->
