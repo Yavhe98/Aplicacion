@@ -10,6 +10,85 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+        <!-- Para el selector de rango de fechas-->
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+        <style>
+            .switch {
+              position: relative;
+              display: inline-block;
+              width: 50px;
+              height: 26px;
+              margin: 10px;
+            }
+        
+            .switch input {
+              opacity: 0;
+              width: 0;
+              height: 0;
+            }
+        
+            .slider {
+              position: absolute;
+              cursor: pointer;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background-color: #ccc;
+              border-radius: 26px;
+              -webkit-transition: .4s;
+              transition: .4s;
+            }
+        
+            .slider:before {
+              position: absolute;
+              content: "";
+              height: 20px;
+              width: 20px;
+              left: 3px;
+              bottom: 3px;
+              background-color: white;
+              border-radius: 50%;
+              -webkit-transition: .4s;
+              transition: .4s;
+            }
+        
+            input:checked + .slider {
+              background-color: #2196F3;
+            }
+        
+            input:focus + .slider {
+              box-shadow: 0 0 1px #2196F3;
+            }
+        
+            input:checked + .slider:before {
+              -webkit-transform: translateX(20px);
+              -ms-transform: translateX(20px);
+              transform: translateX(20px);
+            }
+        
+            /* Estilo adicional para personalizar el aspecto del texto */
+            .switch-label {
+              margin-left: 10px;
+              font-weight: bold;
+            }
+            /* Ajusto el ancho del selector de edificios */
+            #edificio {
+                width: 200px;
+                margin-bottom: 10%;
+                margin-top: 5%;
+            }
+
+            #map {
+                position: "relative"
+            }
+
+          </style>
+
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -42,27 +121,22 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Core</div>
+
+                            <div class="sb-sidenav-menu-heading">Principal</div>
                             <a class="nav-link" href="index.html">
+                                <div class="sb-nav-link-icon"><i class="fas fa-map"></i></div>
+                                Mapa
+                            </a>
+
+                            <div class="sb-sidenav-menu-heading">Estadisticas</div>
+                            <a class="nav-link collapsed" href="#">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-simple"></i></div>
+                                Graficas
+                            </a>
+
+                            <a class="nav-link collapsed" href="#" >
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Dashboard
-                            </a>
-                            <div class="sb-sidenav-menu-heading">Interface</div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Layouts
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="layout-static.html">Static Navigation</a>
-                                    <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
-                                </nav>
-                            </div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Pages
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                Calculadora de ahorro
                             </a>
                             <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
@@ -70,34 +144,17 @@
                                         Authentication
                                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                                     </a>
-                                    <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="login.html">Login</a>
-                                            <a class="nav-link" href="register.html">Register</a>
-                                            <a class="nav-link" href="password.html">Forgot Password</a>
-                                        </nav>
-                                    </div>
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                                        Error
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="401.html">401 Page</a>
-                                            <a class="nav-link" href="404.html">404 Page</a>
-                                            <a class="nav-link" href="500.html">500 Page</a>
-                                        </nav>
-                                    </div>
+
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Addons</div>
                             <a class="nav-link" href="charts.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Charts
+                                <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
+                                Contacto
                             </a>
                             <a class="nav-link" href="tables.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Tables
+                                <div class="sb-nav-link-icon"><i class="fas fa-info"></i></div>
+                                Acerca de
                             </a>
                         </div>
                     </div>
@@ -110,50 +167,138 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Dashboard</h1>
+                        <h1 class="mt-4">Simulacion</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Dashboard</li>
+                            <li class="breadcrumb-item active">Placas solares</li>
                         </ol>
+                        <!------------------------------------------------------------------------------------------------------------------------------------>
+                        
+                        <div class="row">
+
+                            <div class="col-xl-3 col-md-6">
+                                Activar placas
+                                <label class="switch">
+                                    <input type="checkbox" onclick="realizarAccion()">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            
+                            <div class="col-xl-3 col-md-6">
+                                Selecciona un edificio
+                                <select id="edificio">
+                                    <option value="Citic">Citic</option>
+                                    <option value="Mente y Cerebro">Mente y Cerebro 2</option>
+                                    <option value="Politecnico">Politecnico</option>
+                                    <option value="Politicas">Politicas</option>
+                                </select>
+                            </div>
+
+                            <div class="col-xl-3 col-md-6">
+                                <button onclick="addPanel()" style="display: block; margin: 0 auto;">(+) Añadir placa</button>
+                                <button onclick="removePanel()" style="display: block; margin: 0 auto;">(-) Quitar placa</button>
+                            </div>
+
+                            <script>
+                              function addPanel() {
+                                // Aquí puedes escribir el código para la acción que deseas que ocurra
+                                console.log("Acción realizada");
+                                // Puedes agregar más líneas de código para realizar otras tareas
+                              }
+
+                              function removePanel(){
+                                // Codigo que quite la placa solar del edificio
+                              }
+                            </script>
+
+                        </div>
+
+                        <script>
+                                // Accion para el boton "Activar placas"
+                                function realizarAccion() {
+                                    var switchElement = document.querySelector('.switch');
+                                    var isChecked = switchElement.querySelector('input').checked;
+
+                                    if (isChecked) {
+                                        // Acción a realizar cuando el switch está activado
+                                        console.log('El switch está activado');
+                                    } else {
+                                        // Acción a realizar cuando el switch está desactivado
+                                        console.log('El switch está desactivado');
+                                    }
+                                }
+
+                                // Accion para el selector de edificio
+                                var selector = document.getElementById("edificio");
+                                selector.addEventListener("change", function() {
+                                    var opcionSeleccionada = selector.value;
+                                    console.log("Opción seleccionada: " + opcionSeleccionada);
+                                });
+
+                        </script>
+
+
+                        
+
                         <div class="row">
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">Primary Card</div>
+                                    <div class="card-body">Invierno</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <a class="small text-white stretched-link" href="#">Ver detalles</a>
                                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-warning text-white mb-4">
-                                    <div class="card-body">Warning Card</div>
+                                    <div class="card-body">Primavera</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <a class="small text-white stretched-link" href="#">Ver detalles</a>
                                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-success text-white mb-4">
-                                    <div class="card-body">Success Card</div>
+                                    <div class="card-body">Verano</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <a class="small text-white stretched-link" href="#">Ver detalles</a>
                                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-danger text-white mb-4">
-                                    <div class="card-body">Danger Card</div>
+                                    <div class="card-body">Otoño</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">View Details</a>
+                                        <a class="small text-white stretched-link" href="#">Ver detalles</a>
                                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+                        <!-------------------------------------------------------------------------------------------------------------------------------------->
+
+<div class="row">
+    <div class="col-xl-6">
+
+        <label for="fecha-inicio">Desde:</label>
+        <input type="text" id="fecha-inicio" name="fecha-inicio" value="05/02/2019">
+
+        <label for="fecha-fin">Hasta:</label>
+        <input type="text" id="fecha-fin" name="fecha-fin" value="04/11/2022">
+
+        <div id="slider-range"></div>
+    </div>
+</div>
+
                         <div class="row">
                             <div class="col-xl-6">
+
+                                
+
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-area me-1"></i>
@@ -162,16 +307,52 @@
                                     <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
                                 </div>
                             </div>
+
                             <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-chart-bar me-1"></i>
-                                        Bar Chart Example
-                                    </div>
-                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
-                                </div>
+                                <div id="map"></div>
                             </div>
                         </div>
+
+
+<script>
+    $(document).ready(function() {
+        var dateFormat = "dd-mm-YYYY";
+        var startDate = new Date(2015, 0, 1);
+        var endDate = new Date(2022, 11, 31);
+
+        $("#fecha-inicio").datepicker({
+        dateFormat: dateFormat,
+        defaultDate: startDate,
+        onSelect: function(selectedDate) {
+            $("#slider-range").slider("values", 0, selectedDate);
+        }
+        });
+
+        $("#fecha-fin").datepicker({
+        dateFormat: dateFormat,
+        defaultDate: endDate,
+        onSelect: function(selectedDate) {
+            $("#slider-range").slider("values", 1, selectedDate);
+        }
+        });
+
+        $("#slider-range").slider({
+        range: true,
+        min: startDate.getTime(),
+        max: endDate.getTime(),
+        values: [startDate.getTime(), endDate.getTime()],
+        slide: function(event, ui) {
+            var minDate = new Date(ui.values[0]);
+            var maxDate = new Date(ui.values[1]);
+
+            $("#fecha-inicio").datepicker("setDate", minDate);
+            $("#fecha-fin").datepicker("setDate", maxDate);
+        }
+        });
+    });
+    </script>
+
+                        <!-------------------------------------------------------------------------------------------------------------------------------------->    
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
@@ -675,7 +856,7 @@
                     </div>
                 </footer>
             </div>
-            <!--div id="map"></div-->
+            
         </div>
 
         <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js"></script>
