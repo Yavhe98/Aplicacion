@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Página 1</title>
+</head>
+<body>
+    <h1>Página 1</h1>
+    
+    <label for="fecha">Selecciona una fecha:</label>
+    <input type="date" id="fecha" name="fecha">
+    
+    <script>
+        // Obtener el elemento input de fecha
+        var inputFecha = document.getElementById("fecha");
+
+        // Manejar el evento cuando cambia la fecha seleccionada
+        inputFecha.addEventListener("change", function() {
+            // Obtener el valor de la fecha seleccionada
+            var fechaSeleccionada = inputFecha.value;
+            
+            // Redireccionar a la página 2 pasando la fecha como parámetro en la URL
+            window.location.href = "reprueba2.html?fecha=" + fechaSeleccionada;
+        });
+    </script>
+</body>
+</html>

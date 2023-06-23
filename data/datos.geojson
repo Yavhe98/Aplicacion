@@ -1,0 +1,112 @@
+{
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "Address": "Calle Periodista Rafael Gómez Montero, 2, 18014 Granada",
+          "URL": "http://citic.ugr.es/",
+          "Name": "CITIC-UGR",
+          "kWh": 50
+        },
+        "geometry": {
+          "coordinates": [
+            -3.6241964604878065,
+            37.19778867926196
+          ],
+          "type": "Point"
+        },
+        "id": "1c63a775c8467a602042d872e6d589f8"
+      },
+
+      {
+        "type": "Feature",
+        "properties": {
+          "Address": "Campus Universitario de Cartuja, s/n, 18011 Granada",
+          "URL": "https://patrimonio.ugr.es/bien-inmueble/colegio-maximo-de-cartuja/",
+          "Name": "Colegio Máximo",
+          "kWh": 2000
+        },
+        "geometry": {
+          "coordinates": [
+            -3.596470796362878,
+            37.193622900212766
+          ],
+          "type": "Point"
+        },
+        "id": "1c63a775c8467a602042d872e6d589f8"
+      },
+
+      {
+        "type": "Feature",
+        "properties": {
+          "Address": "Campus Universitario de Fuentenueva, Paseo Prof. Juan Ossorio, s/n, 18003 Granada",
+          "URL": "http://cic.ugr.es/",
+          "Name": "CIC Centro de Instrumentación Científica",
+          "kWh": 3600
+        },
+        "geometry": {
+          "coordinates": [
+            -3.610659033185394,
+            37.18204477130982
+          ],
+          "type": "Point"
+        },
+        "id": "5549bcdadb399d0fad9dff5d6304aa83"
+      },
+    
+      {
+        "type": "Feature",
+        "properties": {
+          "Address": "Calle Prof. Vicente Callao, 7, 18011 Granada",
+          "URL": "http://cimcyc.ugr.es/",
+          "Name": "Centro de Investigación Mente, Cerebro y Comportamiento",
+          "kWh": 600
+        },
+        "geometry": {
+          "coordinates": [
+            -3.5962045673180385,
+            37.19637469070499
+          ],
+          "type": "Point"
+        },
+        "id": "5549bcdadb399d0fad9dff5d6304aa83"
+      },
+
+      {
+        "type": "Feature",
+        "properties": {
+          "Address": "Escuela Técnica Superior de Ingeniería de Caminos, Canales y Puertos planta 3 Campus Fuentenueva, 18002 Granada",
+          "URL": "https://biblioteca.ugr.es/pages/biblioteca_ugr/bibliotecas_centros/politecnico",
+          "Name": "Biblioteca Politécnica de la Universidad de Granada",
+          "kWh": 7000
+        },
+        "geometry": {
+          "coordinates": [
+            -3.6082692855271534,
+            37.18138468647553
+          ],
+          "type": "Point"
+        },
+        "id": "5549bcdadb399d0fad9dff5d6304aa83"
+      },
+
+      {
+        "type": "Feature",
+        "properties": {
+          "Address": "C. Rector López Argüeta, s/n, 18001 Granada",
+          "URL": "https://polisocio.ugr.es/",
+          "Name": "UGR: Facultad de Ciencias Políticas",
+          "kWh": 100
+        },
+        "geometry": {
+          "coordinates": [
+            -3.6044606828038623,
+            37.18072215240509
+          ],
+          "type": "Point"
+        },
+        "id": "5549bcdadb399d0fad9dff5d6304aa83"
+      }
+
+    ]
+}

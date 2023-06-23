@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Página 2</title>
+</head>
+<body>
+    <h1>Página 2</h1>
+    
+    <h2>Fecha seleccionada:</h2>
+    <p id="fecha-seleccionada"></p>
+    
+    <script>
+        // Obtener el parámetro de la URL
+        var urlParams = new URLSearchParams(window.location.search);
+        var fechaSeleccionada = urlParams.get('fecha');
+        
+        // Mostrar la fecha seleccionada en la página 2
+        var fechaSeleccionadaElement = document.getElementById("fecha-seleccionada");
+        fechaSeleccionadaElement.textContent = fechaSeleccionada;
+    </script>
+</body>
+</html>

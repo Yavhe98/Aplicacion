@@ -7,14 +7,23 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Simulador Solar</title>
+
+        <!-- Hoja de estilos para el mapa proporcionada por mapbox-->
+        <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' />
+
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+        <!-- Para enviar datos de fecha en tiempo real-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
         <!-- Para el selector de rango de fechas-->
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
 
         <style>
             .switch {
@@ -91,7 +100,7 @@
                 margin-top: 30px;
                 margin-bottom: 30px;
             }
-          </style>
+        </style>
 
     </head>
     <body class="sb-nav-fixed">
@@ -189,14 +198,43 @@
 
                             
                             <div class="col-xl-3 col-md-6">
-                                Selecciona un edificio
-                                <select id="edificio">
-                                    <option value="Citic">Citic</option>
-                                    <option value="Mente y Cerebro">Mente y Cerebro 2</option>
-                                    <option value="Politecnico">Politecnico</option>
-                                    <option value="Politicas">Politicas</option>
-                                </select>
+                                <form>
+                                    <label for="opcion">Elige un edficio:</label>
+                                    <select id="opcion" name="opcion">
+                                        <option value="citic">Citic-UGR</option>
+                                        <option value="cmaximo">Cmaximo</option>
+                                        <option value="mentecerebro">Mente y Cerebro</option>
+                                        <option value="instrumentacion">Intrumentacion</option>
+                                        <option value="politecnico">Politécnico</option>
+                                        <option value="politicas">Políticas</option>
+                                    </select>
+                                </form>
                             </div>
+
+                            <script>
+                                // Obtener el elemento select
+                                var select = document.getElementById("opcion");
+                        
+                                // Manejar el evento cuando cambia la opción seleccionada
+                                select.addEventListener("change", function() {
+                                    // Obtener el valor seleccionado
+                                    var opcionSeleccionada = select.value;
+                                    
+                                    // Realizar la solicitud AJAX al archivo php
+                                    $.ajax({
+                                        url:"data/chart-bar-demo.php",
+                                        type: "POST",
+                                        data: { opcion: opcionSeleccionada},
+                                        success: function(response) {
+                                            console.log("Valor enviado al archivo PHP: " + opcionSeleccionada);
+                                            // Realizar acciones adicionales según sea necesario
+                                        },
+                                        error: function() {
+                                            console.log("Error al enviar el valor al archivo PHP");
+                                        }
+                                    });
+                                });
+                            </script>
 
                             <div class="col-xl-3 col-md-6">
                                 <button onclick="addPanel()" style="display: block; margin: 0 auto;">(+) Añadir placa</button>
@@ -232,12 +270,6 @@
                                     }
                                 }
 
-                                // Accion para el selector de edificio
-                                var selector = document.getElementById("edificio");
-                                selector.addEventListener("change", function() {
-                                    var opcionSeleccionada = selector.value;
-                                    console.log("Opción seleccionada: " + opcionSeleccionada);
-                                });
 
                         </script>
 
@@ -300,42 +332,60 @@
 
                         <script>
                             $(document).ready(function() {
-                                var dateFormat = "yy-mm-dd";
-                                var startDate = new Date(2015, 1, 1);
-                                var endDate = new Date(2022, 12, 31);
-            
-                                $("#fecha-inicio").datepicker({
-                                    dateFormat: dateFormat,
-                                    defaultDate: startDate,
-                                    onSelect: function(selectedDate) {
-                                        $("#slider-range").slider("values", 0, selectedDate);
-                                    }
+                              var dateFormat = "yy-mm-dd";
+                              var startDate = new Date(2015, 1, 1); // Modificado el índice del mes a 0 para enero
+                              var endDate = new Date(2022, 11, 31); // Modificado el índice del mes a 11 para diciembre
+                          
+                              $("#fecha-inicio").datepicker({
+                                dateFormat: dateFormat,
+                                defaultDate: startDate,
+                                onSelect: function(selectedDate) {
+                                  $("#slider-range").slider("values", 0, selectedDate);
+                                  sendDates();
+                                }
+                              });
+                          
+                              $("#fecha-fin").datepicker({
+                                dateFormat: dateFormat,
+                                defaultDate: endDate,
+                                onSelect: function(selectedDate) {
+                                  $("#slider-range").slider("values", 1, selectedDate);
+                                  sendDates();
+                                }
+                              });
+                          
+                              $("#slider-range").slider({
+                                range: true,
+                                min: startDate.getTime(),
+                                max: endDate.getTime(),
+                                values: [startDate.getTime(), endDate.getTime()],
+                                slide: function(event, ui) {
+                                  var minDate = new Date(ui.values[0]);
+                                  var maxDate = new Date(ui.values[1]);
+                          
+                                  $("#fecha-inicio").datepicker("setDate", minDate);
+                                  $("#fecha-fin").datepicker("setDate", maxDate);
+                                  sendDates();
+                                }
+                              });
+                          
+                              // Obtener las fechas seleccionadas y enviarlas a través de AJAX
+                              function sendDates() {
+                                var startDate = $("#fecha-inicio").val();
+                                var endDate = $("#fecha-fin").val();
+                          
+                                $.ajax({
+                                  url: "prueba.php",
+                                  method: "POST",
+                                  data: { startDate: startDate, endDate: endDate },
+                                  success: function(response) {
+                                    console.log("Fechas enviadas: " + response);
+                                  }
                                 });
-            
-                                $("#fecha-fin").datepicker({
-                                    dateFormat: dateFormat,
-                                    defaultDate: endDate,
-                                    onSelect: function(selectedDate) {
-                                        $("#slider-range").slider("values", 1, selectedDate);
-                                    }
-                                });
-            
-                                $("#slider-range").slider({
-                                    range: true,
-                                    min: startDate.getTime(),
-                                    max: endDate.getTime(),
-                                    values: [startDate.getTime(), endDate.getTime()],
-                                    slide: function(event, ui) {
-                                        var minDate = new Date(ui.values[0]);
-                                        var maxDate = new Date(ui.values[1]);
-                
-                                        $("#fecha-inicio").datepicker("setDate", minDate);
-                                        $("#fecha-fin").datepicker("setDate", maxDate);
-                                    }
-                                });
+                              }
                             });
-                        </script>
-hola este es el valor <script>console.log(minDate)</script>
+                          </script>
+
                         <!-------------------------------------------------------------------------------------------------------------------------------------->
 
                         <div class="row">
@@ -345,7 +395,7 @@ hola este es el valor <script>console.log(minDate)</script>
                                         <i class="fas fa-chart-area me-1"></i>
                                         Area Chart Example
                                     </div>
-                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
                                 </div>
                             </div>
 
@@ -494,8 +544,10 @@ hola este es el valor <script>console.log(minDate)</script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <!--script src="js/scripts.js"></script-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        <script src="data/chart-area-demo.js"></script>
-        <script src="data/chart-bar-demo.php"></script>
+        <!--script src="data/chart-area-demo.js"></script-->
+        <?php require "data/chart-area-demo.php"?>
+        <?php require "data/chart-bar-demo.php"?>
+        
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
     </body>
