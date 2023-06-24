@@ -21,15 +21,14 @@ body { margin: 0; padding: 0; }
         // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
         style: 'mapbox://styles/mapbox/dark-v11',
         hash: true,
-    center: [-3.614042, 37.202174], // Vista inicial (lat,lon)
-    pitch: 45,  // Grados de inclinación
-    bearing: -17.6, // Direccion en la que se mira
-    zoom: 15.5  // Zoom inicial
+        center: [-3.614042, 37.202174], // Vista inicial (lat,lon)
+        pitch: 45,  // Grados de inclinación
+        bearing: -17.6, // Direccion en la que se mira
+        zoom: 15.5  // Zoom inicial
     });
 
 
-
-    map.on('load', () => {
+    map.on('load', function(){
         // Add a new source from our GeoJSON data and
         // set the 'cluster' option to true. GL-JS will
         // add the point_count property to your source data.
@@ -44,7 +43,6 @@ body { margin: 0; padding: 0; }
         });
 
 
-
         map.addLayer({
         'id': '3d-buildings',
         'source': 'composite',
@@ -54,9 +52,8 @@ body { margin: 0; padding: 0; }
         'minzoom': 8,
         'paint': {
             'fill-extrusion-color': '#aaa',
-
-// use an 'interpolate' expression to add a smooth transition effect to the
-// buildings as the user zooms in
+            // use an 'interpolate' expression to add a smooth transition effect to the
+            // buildings as the user zooms in
             'fill-extrusion-height': [
                 "interpolate", ["linear"], ["zoom"],
                 15, 0,

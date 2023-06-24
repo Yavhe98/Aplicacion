@@ -5,8 +5,8 @@
         "properties": {
           "Address": "Calle Periodista Rafael Gómez Montero, 2, 18014 Granada",
           "URL": "http://citic.ugr.es/",
-          "Name": "CITIC-UGR",
-          "kWh": 50
+          "Name": "CITIC-UR",
+          "kWh": 1234
         },
         "geometry": {
           "coordinates": [

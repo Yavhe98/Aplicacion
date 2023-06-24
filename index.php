@@ -9,7 +9,7 @@
         <title>Simulador Solar</title>
 
         <!-- Hoja de estilos para el mapa proporcionada por mapbox-->
-        <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' />
+        <!--link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' /-->
 
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
@@ -23,7 +23,8 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-
+        <!--link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+        <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script-->
 
         <style>
             .switch {
@@ -92,8 +93,14 @@
                 margin-top: 5%;
             }
 
+            
             #map {
-                position: "relative"
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                width: 50%;
+                height: 50%;
+                margin-top: 5%;
             }
 
             #slider-range{
@@ -106,7 +113,7 @@
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="index.html">Energía Renovable</a>
+            <a class="navbar-brand ps-3" href="index.php">Energía Renovable</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -136,7 +143,7 @@
                         <div class="nav">
 
                             <div class="sb-sidenav-menu-heading">Principal</div>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="mapa.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-map"></i></div>
                                 Mapa
                             </a>
@@ -246,29 +253,9 @@
                             </script>
 
                         </div>
-
-                        <script>
-                                // Accion para el boton "Activar placas"
-                                function realizarAccion() {
-                                    var switchElement = document.querySelector('.switch');
-                                    var isChecked = switchElement.querySelector('input').checked;
-
-                                    if (isChecked) {
-                                        // Acción a realizar cuando el switch está activado
-                                        console.log('El switch está activado');
-                                    } else {
-                                        // Acción a realizar cuando el switch está desactivado
-                                        console.log('El switch está desactivado');
-                                    }
-                                }
-
-
-                        </script>
-
-
                         
 
-                        <div class="row">
+                        <!--div class="row">
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-primary text-white mb-4">
                                     <div class="card-body">Invierno</div>
@@ -305,12 +292,12 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div-->
 
                         <!-------------------------------------------------------------------------------------------------------------------------------------->
 
                         <div class="row">
-                            <div class="col-xl-6">
+                            <div class="col-xl-12">
 
                                 <label for="fecha-inicio">Desde:</label>
                                 <input type="text" id="fecha-inicio" name="fecha-inicio" value="2015-1-1">
@@ -381,7 +368,7 @@
                         <!-------------------------------------------------------------------------------------------------------------------------------------->
 
                         <div class="row">
-                            <div class="col-xl-6">
+                            <div class="col-xl-12">
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-area me-1"></i>
@@ -389,10 +376,6 @@
                                     </div>
                                     <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
                                 </div>
-                            </div>
-
-                            <div class="col-xl-6">
-                                <div id="map"></div>
                             </div>
                         </div>
 
@@ -530,11 +513,10 @@
             
         </div>
 
-        <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js"></script>
+        <!--script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.js"></script-->
         <script src="js/scripts.js"></script>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <!--script src="js/scripts.js"></script-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
         <!--script src="data/chart-area-demo.js"></script-->
         <?php require "data/chart-area-demo.php"?>
