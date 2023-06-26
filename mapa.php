@@ -11,7 +11,12 @@
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <style>
     body { margin: 0; padding: 0; }
-    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    #map { position: absolute; top: 0; bottom: 0; width:100%; margin-top: 5%;}
+    #yearSelector {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
     </style>
 </head>
     <body class="sb-nav-fixed">
@@ -88,10 +93,41 @@
                     </div>
                 </nav>
             </div>
+            <div id='layoutSidenav_content'>
+                <main>
+                    <div class="container-fluid px-4">
+                    <h1 class="mt-4">Mapa</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">De Granada</li>
+                        </ol>
 
-            <div id="map"></div>
+                        <div class="row">
+  <div class="col-xl-3">
+    <!-- Selector de año -->
+    <select class="form-select" id="yearSelector">
+      <option selected>2020</option>
+      <option>2019</option>
+      <option>2018</option>
+      <option>2017</option>
+      <option>2016</option>
+      <option>2015</option>
+      <option>2014</option>
+      <option>2013</option>
 
-            <script src="js/scripts.js"></script>
+    </select>
+  </div>
+  <div class="col-xl-9">
+    <div id="map"></div>
+  </div>
+</div>
+
+                </main>
+            </div>
+        </div>
+
+
+
+<script src="js/scripts.js"></script>
 
 </body>
 </html>

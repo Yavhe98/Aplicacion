@@ -1,19 +1,13 @@
-<?php
+<?php 
+/*
 
-if (isset($_POST['minDate']) && isset($_POST['maxDate'])) {
-    $minDate = $_POST['minDate'];
-    $maxDate = $_POST['maxDate'];
-  
-    // Realizar el procesamiento necesario con las variables minDate y maxDate
-    // ...
-  
-    // Devolver una respuesta si es necesario
-    echo 'Procesamiento exitoso';
-  }
-  else{
-    echo 'No funca <br>';
-  }
-
+$conecta = mysqli_connect("localhost:3306", "root", '', "consumo_ugr");
+if(mysqli_connect_errno()){
+printf("No se ha podido conectar con la base de datos: %s\n", mysqli_connect_error());
+exit();
+}
+mysqli_set_charset($conecta, "utf8");
+}*/
 // Detalles de conexión a la base de datos
 $servername = "localhost"; // Nombre del servidor de la base de datos
 $username = "root"; // Nombre de usuario de la base de datos
@@ -27,7 +21,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Error al conectar a la base de datos: " . $conn->connect_error);
 }
-
+/*
 // A partir de este punto, puedes ejecutar consultas SQL en tu base de datos
 
 // Ejemplo de consulta: seleccionar todos los registros de una tabla
@@ -152,8 +146,5 @@ for ($i = 0; $i < 10; $i++) {
 
 // Cerrar la conexión
 $conn->close();
-
+*/
 ?>
-
-</body>
-</html>
