@@ -3,6 +3,12 @@ import mysql.connector
 import json
 from datetime import datetime, date
 
+
+# DATOS DE LA PLACA
+eficiencia = 0.22 # %
+area = 1.5 # m^2
+
+
 # Nos conectamos a la base de datos
 conexion = mysql.connector.connect(
     host="localhost",
@@ -56,9 +62,14 @@ def distancia(fecha):
 def declinacion_solar(dia_del_anio):
     return 23.45 * np.sin(np.radians(360 * (284 + dia_del_anio) / 365))
 
-# Función FINAL de Hargreaves and Samani (HS) para calcular la radiación solar
+# Función de Hargreaves and Samani (HS) para calcular la radiación solar
 def HS(Ra, Tx, Tn):
     return 0.0023*Ra*np.sqrt(Tx-Tn)
+
+
+# Función FINAL para calcular la energía generada por las placas
+def generacion(radiacion, area, eficiencia):
+    return radiacion*area*eficiencia
 
 # ------------------------------------------------------------------------------------------------------------------------------ #
 
@@ -79,10 +90,12 @@ for fila in aemet:
     tmin.append(fila[3])
 
 
-
+# 2013-01-01   ---   2017-12-31
+# Diario
 registros = len(fechas)
 
 # Datos
+generaciones = []
 radiacion_solar = []
 radiacion_extraterrestre = []
 s0 = []
@@ -103,14 +116,19 @@ for i in range(registros):
 for i in range(registros):
     radiacion_solar.append(HS(radiacion_extraterrestre[i],tmax[i],tmin[i]))
 
+for i in range(registros):
+    generaciones.append(generacion(radiacion_solar[i],area,eficiencia))
+
 # Convertir el tipo de dato de las listas a float
-radiacion_solar = list(map(float, radiacion_solar))
+generacion = list(map(float, radiacion_solar))
 
 # Insertar la radiación solar diaria en la base de datos
 for i in range(registros):
-    consulta = "INSERT INTO radiacion_solar (Fecha, Radiacion) VALUES (%s, %s)"
-    valores = (fechas[i], radiacion_solar[i])
+    consulta = "INSERT INTO generacion (Fecha, Generacion) VALUES (%s, %s)"
+    valores = (fechas[i], generacion[i])
     cursor.execute(consulta, valores)
+
+
 
 conexion.commit()
 cursor.close()

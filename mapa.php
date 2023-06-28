@@ -58,7 +58,7 @@
                             </a>
 
                             <div class="sb-sidenav-menu-heading">Estadisticas</div>
-                            <a class="nav-link collapsed" href="index.php">
+                            <a class="nav-link collapsed" href="graficas.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-simple"></i></div>
                                 Graficas
                             </a>

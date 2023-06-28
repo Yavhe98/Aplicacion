@@ -4195,6 +4195,10 @@ textarea.form-control-lg {
   border: var(--bs-card-border-width) solid var(--bs-card-border-color);
   border-radius: var(--bs-card-border-radius);
 }
+.card:hover {
+  background-color: #f8f9fa; /* Color de fondo al pasar el ratón por encima */
+  cursor: pointer;
+}
 .card > hr {
   margin-right: 0;
   margin-left: 0;
@@ -4219,6 +4223,7 @@ textarea.form-control-lg {
 }
 
 .card-body {
+  transition: background-color 0.3s ease-in-out;
   flex: 1 1 auto;
   padding: var(--bs-card-spacer-y) var(--bs-card-spacer-x);
   color: var(--bs-card-color);
