@@ -8,8 +8,6 @@ $nplacas =  $_POST['counter'];
 $fechas = array();
 $consumo = array();
 $generacion = array();
-$consumo_resumen = array();
-$generacion_resumen = array();
 
 $consulta = "SELECT * FROM $edificio WHERE Fecha BETWEEN '$minDate' AND '$maxDate'";
 $lectura = mysqli_query($conn, $consulta);
@@ -25,10 +23,18 @@ while($lecturas = $lectura->fetch_array()){
   $generacion[] = $lecturas["Generacion"];
 }
 
+foreach ($generacion as &$panel) {
+  $panel = $panel * $nplacas;
+}
 
-// Definicion de la granularidad
-if(count($consumo) > 50){
-  $paso = round(count($consumo) /50);
+
+// DEFINICIÓN DE GRANULARIDAD
+
+// Si generacion (el array mas pequeño) tiene mas de 50 registros...
+if(count($generacion) > 50){
+  $consumo_resumen = array_fill(0, 50, 0);
+  $generacion_resumen = array_fill(0, 50, 0);
+  $paso = round(count($generacion) /50);
   for($i = 0; $i < 50; $i++){
     for($j = 0; $j < $paso; $j++){
       $consumo_resumen[$i] += $consumo[($i*$paso)+$j];
@@ -37,11 +43,25 @@ if(count($consumo) > 50){
     }
   }
 }
+# Si generacion tiene menos de 50 registros, pero consumo tiene mas...
+else if(count($consumo > 50)){
+  $consumo_resumen = array_fill(0, count($generacion), 0);
+  $generacion_resumen = array_fill(0, count($generacion), 0);
+  $paso = round(count($consumo)/count($generacion));
+  for($i = 0; $i < $paso; $i++){
+    for($j = 0; $j < $paso; $j++){
+      $consumo_resumen[$i] += $consumo[($i*$paso)+$j];
+      $fechas_resumen[$i] = $fechas[($i*$paso)+$j];
+    }
+  }
+}
+# Si los dos tienen menos de 50... 
 else{
   $consumo_resumen = $consumo;
   $generacion_resumen = $generacion;
   $fechas_resumen = $fechas;
 }
+
 
 $valor_maximo = max(max($generacion_resumen), max($consumo_resumen));
 
@@ -57,13 +77,14 @@ var generacion = <?php echo json_encode($generacion_resumen); ?>
 
 var maximo = <?php echo json_encode($valor_maximo); ?>
 
+
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#292b2c';
 
 
 // Area Chart Example
-var ctx = document.getElementById("myBarChart");
+var ctx = document.getElementById("myLineChart");
 var myLineChart = new Chart(ctx, {
   type: 'line',
   data: {
@@ -95,7 +116,7 @@ var myLineChart = new Chart(ctx, {
       pointHitRadius: 50,
       pointBorderWidth: 2,
       data: generacion,
-    }
+    },
   ],
 
   },
@@ -109,7 +130,7 @@ var myLineChart = new Chart(ctx, {
           display: false
         },
         ticks: {
-          maxTicksLimit: 8
+          maxTicksLimit: 15
         }
       }],
       yAxes: [{

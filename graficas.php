@@ -261,6 +261,17 @@
 
                         </div>
 
+                        <div class="col-xl-6">
+                                <div class="form-group">
+                                    <label for="selector">Gráfica:</label>
+                                    <select class="form-control" id="selector" name="selector" multiple>
+                                        <option value="citic">Consumo</option>
+                                        <option value="cmaximo">Generacion</option>
+                                        <option value="instrumentacion">Ahorro</option>
+                                    </select>
+                                </div>
+                            </div>
+
                         <button type="submit" class="btn btn-primary">Enviar</button>
                     </form>
 
@@ -343,7 +354,7 @@
                                         <i class="fas fa-chart-area me-1"></i>
                                         Area Chart Example
                                     </div>
-                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+                                    <div class="card-body"><canvas id="myLineChart" width="100%" height="40"></canvas></div>
                                 </div>
                             </div>
                         </div>
