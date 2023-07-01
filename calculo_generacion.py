@@ -1,13 +1,20 @@
+# Este archivo sólo se llamará desde index.php para registrar en la base de datos el tipo y el número de placas de la que se disponen
+
 import numpy as np
 import mysql.connector
 import json
 from datetime import datetime, date
+import sys
 
+if len(sys.argv) != 4:
+    print("Error: Se requieren tres parámetros. No", len(sys.argv))
+    sys.exit(1)
 
-# DATOS DE LA PLACA
-eficiencia = 0.22 # %
-area = 1.5 # m^2
+eficiencia = float(sys.argv[1])
+area = float(sys.argv[2])
+numero = int(sys.argv[3])
 
+eficiencia = eficiencia/ 100
 
 # Nos conectamos a la base de datos
 conexion = mysql.connector.connect(
@@ -69,7 +76,7 @@ def HS(Ra, Tx, Tn):
 
 # Función FINAL para calcular la energía generada por las placas
 def generacion(radiacion, area, eficiencia):
-    return radiacion*area*eficiencia
+    return (radiacion*area*eficiencia)
 
 # ------------------------------------------------------------------------------------------------------------------------------ #
 
@@ -117,18 +124,20 @@ for i in range(registros):
     radiacion_solar.append(HS(radiacion_extraterrestre[i],tmax[i],tmin[i]))
 
 for i in range(registros):
-    generaciones.append(generacion(radiacion_solar[i],area,eficiencia))
+    generaciones.append( numero * (generacion(radiacion_solar[i],area,eficiencia)) )
 
 # Convertir el tipo de dato de las listas a float
-generacion = list(map(float, radiacion_solar))
+generacion = list(map(float, generaciones))
 
 # Insertar la radiación solar diaria en la base de datos
+consulta = "TRUNCATE TABLE generacion"
+cursor.execute(consulta)
+conexion.commit()
+
 for i in range(registros):
     consulta = "INSERT INTO generacion (Fecha, Generacion) VALUES (%s, %s)"
     valores = (fechas[i], generacion[i])
     cursor.execute(consulta, valores)
-
-
 
 conexion.commit()
 cursor.close()

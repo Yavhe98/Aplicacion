@@ -25,16 +25,22 @@
 
         <!--link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
         <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script-->
-        <?php include("bd.php"); ?>
+        <?php
+            include("bd.php"); 
 
+            // Por defecto se mostrará el rango de fechas desde hace un mes hasta el dia de hoy
+            $_POST['minDate'] = isset($_POST['minDate']) ? $_POST['minDate'] : '2015-01-01 00:00';
+            $_POST['maxDate'] = isset($_POST['maxDate']) ? $_POST['maxDate'] : '2015-12-31 00:00';
+            $_POST['edificio'] = isset($_POST['edificio']) ? $_POST['edificio'] : 'citic';
+            $_POST['counter'] = isset($_POST['counter']) ? $_POST['counter'] : 5;
+        ?>
 
-<?php
-// Por defecto se mostrará el rango de fechas desde hace un mes hasta el dia de hoy
-        $_POST['minDate'] = isset($_POST['minDate']) ? $_POST['minDate'] : '2015-01-01 00:00';
-        $_POST['maxDate'] = isset($_POST['maxDate']) ? $_POST['maxDate'] : '2015-12-31 00:00';
-        $_POST['edificio'] = isset($_POST['edificio']) ? $_POST['edificio'] : 'citic';
-        $_POST['counter'] = isset($_POST['counter']) ? $_POST['counter'] : 5;
-?>
+        <style>
+            .checkbox-inline {
+            display: inline-block;
+            margin-right: 10px;
+            }
+        </style>
 
     </head>
     <body class="sb-nav-fixed">
@@ -82,7 +88,7 @@
                                 Graficas
                             </a>
 
-                            <a class="nav-link collapsed" href="#" >
+                            <a class="nav-link collapsed" href="ahorro.php" >
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Calculadora de ahorro
                             </a>
@@ -120,160 +126,55 @@
                             <li class="breadcrumb-item active">Placas solares</li>
                         </ol-->
                         <!------------------------------------------------------------------------------------------------------------------------------------>
-                        
-            
-
-                            
-                           
-                            
-
-                            <!--script>
-                                // Obtener el elemento select
-                                var select = document.getElementById("opcion");
-                        
-                                // Manejar el evento cuando cambia la opción seleccionada
-                                select.addEventListener("change", function() {
-                                    // Obtener el valor seleccionado
-                                    var opcionSeleccionada = select.value;
-                                    
-                                    // Realizar la solicitud AJAX al archivo php
-                                    $.ajax({
-                                        url:"data/chart-bar-demo.php",
-                                        type: "POST",
-                                        data: { opcion: opcionSeleccionada},
-                                        success: function(response) {
-                                            console.log("Valor enviado al archivo PHP: " + opcionSeleccionada);
-                                            // Realizar acciones adicionales según sea necesario
-                                        },
-                                        error: function() {
-                                            console.log("Error al enviar el valor al archivo PHP");
-                                        }
-                                    });
-                                });
-                            </script>
-
-                            <div class="col-xl-3 col-md-6">
-                                <button onclick="addPanel()" style="display: block; margin: 0 auto;">(+) Añadir placa</button>
-                                <button onclick="removePanel()" style="display: block; margin: 0 auto;">(-) Quitar placa</button>
-                            </div>
-
-                            <script>
-                              function addPanel() {
-                                // Aquí puedes escribir el código para la acción que deseas que ocurra
-                                console.log("Acción realizada");
-                                // Puedes agregar más líneas de código para realizar otras tareas
-                              }
-
-                              function removePanel(){
-                                // Codigo que quite la placa solar del edificio
-                              }
-                            </script>
-
-                        </div-->
-                        
-
-                        <!--div class="row">
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-primary text-white mb-4">
-                                    <div class="card-body">Invierno</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">Ver detalles</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-warning text-white mb-4">
-                                    <div class="card-body">Primavera</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">Ver detalles</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-success text-white mb-4">
-                                    <div class="card-body">Verano</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">Ver detalles</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-6">
-                                <div class="card bg-danger text-white mb-4">
-                                    <div class="card-body">Otoño</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">Ver detalles</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div-->
-
-                        <!-------------------------------------------------------------------------------------------------------------------------------------->
 
                         
-                    <form action="#" method="POST">
+                        <form action="#" method="POST">
 
-                        <div class="row">
+                            <div class="row">
 
-                            <div class="col-xl-6">
-                                <div class="form-group">
-                                    <label for="selector">Edificio:</label>
-                                    <select class="form-control" id="edificio" name="edificio">
-                                        <option value="citic">Citic</option>
-                                        <option value="cmaximo">Cmaximo</option>
-                                        <option value="instrumentacion">Instrumentacion</option>
-                                        <option value="mentecerebro">Mente y Cerebro</option>
-                                        <option value="politecnico">Politecnico</option>
-                                        <option value="politicas">Politicas</option>
-                                    </select>
+                                <div class="col-xl-6">
+                                    <div class="form-group">
+                                        <label for="selector">Edificio:</label>
+                                        <select class="form-control" id="edificio" name="edificio">
+                                            <option value="citic">Citic</option>
+                                            <option value="cmaximo">Cmaximo</option>
+                                            <option value="instrumentacion">Instrumentacion</option>
+                                            <option value="mentecerebro">Mente y Cerebro</option>
+                                            <option value="politecnico">Politecnico</option>
+                                            <option value="politicas">Politicas</option>
+                                        </select>
+                                    </div>
                                 </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-xl-6">
+                                    <label for="fecha-inicio">Desde:</label>
+                                    <input type="datetime-local" class="form-control" id="minDate" name="minDate" value="<?php echo $_POST["minDate"];?>">
+                                </div>
+
+                                <div class="col-xl-6">
+                                    <label for="fecha-fin">Hasta:</label>
+                                    <input type="datetime-local" class="form-control" id="maxDate" name="maxDate" value="<?php echo $_POST["maxDate"];?>">
+                                </div>
+
                             </div>
 
                             <div class="col-xl-6">
                                 <div class="form-group">
-                                    <button type="button" class="btn btn-primary" id="btn-add">Añadir placa</button>
-                                </div>
-                                <div class="form-group">
-                                    <button type="button" class="btn btn-danger" id="btn-remove">Quitar placa</button>
-                                </div>
-
-                                <span id="counter"><?php echo json_encode($_POST["counter"]);?></span>
-                                <input type="hidden" name="counter" id="counter-input" value="0">
-
-                            </div>
-
-                        </div>
-
-                        <div class="row">
-
-                            <div class="col-xl-6">
-                                <label for="fecha-inicio">Desde:</label>
-                                <input type="datetime-local" class="form-control" id="minDate" name="minDate" value="<?php echo $_POST["minDate"];?>">
-                            </div>
-
-                            <div class="col-xl-6">
-                                <label for="fecha-fin">Hasta:</label>
-                                <input type="datetime-local" class="form-control" id="maxDate" name="maxDate" value="<?php echo $_POST["maxDate"];?>">
-                            </div>
-
-                        </div>
-
-                        <div class="col-xl-6">
-                                <div class="form-group">
-                                    <label for="selector">Gráfica:</label>
-                                    <select class="form-control" id="selector" name="selector" multiple>
-                                        <option value="citic">Consumo</option>
-                                        <option value="cmaximo">Generacion</option>
-                                        <option value="instrumentacion">Ahorro</option>
-                                    </select>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="grafica[]" value="consumo" checked> Consumo
+                                    </label>
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox" name="grafica[]" value="generacion"> Generación
+                                    </label>
                                 </div>
                             </div>
 
-                        <button type="submit" class="btn btn-primary">Enviar</button>
-                    </form>
+                            <button type="submit" class="btn btn-primary">Enviar</button>
+                        </form>
 
 
                         <script>
@@ -307,17 +208,6 @@
                                     }
                                 });
 
-                                $("#btn-add").click(function () {
-                                    counter++;
-                                    $("#counter").text(counter);
-                                });
-
-                                $("#btn-remove").click(function () {
-                                    if (counter > 0) {
-                                        counter--;
-                                        $("#counter").text(counter);
-                                    }
-                                });
 
                             });
 
@@ -354,7 +244,7 @@
                                         <i class="fas fa-chart-area me-1"></i>
                                         Area Chart Example
                                     </div>
-                                    <div class="card-body"><canvas id="myLineChart" width="100%" height="40"></canvas></div>
+                                    <div class="card-body"><canvas id="myLineChart" width="100%" height="40%"></canvas></div>
                                 </div>
                             </div>
                         </div>
@@ -473,8 +363,9 @@
                                 </table>
                             </div>
                         </div>
-                    </div>
+
                 </main>
+
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
@@ -487,13 +378,15 @@
                         </div>
                     </div>
                 </footer>
+
             </div>
             
         </div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
-        <?php include("data/chart-area-demo.php");?>
+        <?php include("data/grafica-principal.php");?>
         <?php //include("data/chart-bar-demo.php");?>
         
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>

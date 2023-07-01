@@ -6,12 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Simulador Solar</title>
+        <title>Calculadora ahorro</title>
 
         <!-- Hoja de estilos para el mapa proporcionada por mapbox-->
         <!--link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.1/mapbox-gl.css' rel='stylesheet' /-->
-
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
@@ -20,60 +18,24 @@
         <!-- Bootstrap JS -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <style>
-        .loading {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 3px solid #fff;
-            border-top-color: transparent;
-            animation: spin 1s linear infinite;
-            margin-left: 10px;
-            display: inline-block;
-            }
+        <!-- Para el selector de rango de fechas-->
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-            @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-            }
+        <!--link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+        <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script-->
+        <?php
+            include("bd.php");
+            
+            $_POST['edificio'] = isset($_POST['edificio']) ? $_POST['edificio'] : 'citic';
+            $_POST['placas'] = isset($_POST['placas']) ? $_POST['placas'] : 5;    
+            
+        ?>
 
-            .hidden {
-            display: none;
-            }
-        </style>
 
     </head>
-
-
-    <script>
-        $(document).ready(function() {
-            $('form').submit(function(event) {
-                event.preventDefault(); // Evitar el envío del formulario
-
-                var eficiencia = $('#eficiencia').val();
-                var area = $('#area').val();
-                var placas = $('#placas').val();
-
-                $.ajax({
-                    type: 'POST',
-                    url: 'ejecutar_generacion.php',
-                    data: {
-                        eficiencia: eficiencia,
-                        area: area,
-                        placas: placas
-                    },
-                    success: function(response) {
-                        // Procesar la respuesta del servidor
-                        $('#resultado').html(response);
-                    }
-                });
-            });
-        });
-    </script>
-
-
-    <body class="sb-nav-fixed" style="background-image: url('assets/img/pantalla_inicio.jpg'); background-size: cover; background-repeat: no-repeat;">
+    <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="index.php">Energía Renovable</a>
@@ -151,57 +113,71 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Energía Renovable</h1>
-                        <ol class="breadcrumb mb-4">
+                        <h1 class="mt-4">Simulacion</h1>
+                        <!--ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item active">Placas solares</li>
-                        </ol>
+                        </ol-->
                         <!------------------------------------------------------------------------------------------------------------------------------------>
-                        
-                        <form>
 
+                        <form action='#' method="POST">
                             <div class="row">
-                                <div class="col-xl-4 col-md-6">
-                                    <div class="card bg-primary text-white mb-4">
-                                        <div class="card-body">Area del panel</div>
-                                        <div class="card-footer d-flex align-items-center justify-content-between">
-                                            <input type="number" name="area" id="area" step="0.1" value=1.50 required>
-                                        </div>
-                                    </div>
+                            <div class="col-xl-6">
+                                <div class="form-group">
+                                <label for="edificio">Seleccione edificio:</label>
+                                <select class="form-control" id="edificio" name="edificio">
+                                    <option value="citic">Citic</option>
+                                    <option value="cmaximo">Cmaximo</option>
+                                    <option value="instrumentacion">Instrumentacion</option>
+                                    <option value="mentecerebro">Mente y Cerebro</option>
+                                    <option value="politecnico">Politecnico</option>
+                                    <option value="politicas">Politicas</option>
+                                </select>
                                 </div>
-
-                                <div class="col-xl-4 col-md-6">
-                                    <div class="card bg-warning text-white mb-4">
-                                        <div class="card-body">Eficiencia del panel</div>
-                                        <div class="card-footer d-flex align-items-center justify-content-between">
-                                            <input type="number" name="eficiencia" id="eficiencia" step="1"value=20 required>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-xl-4 col-md-6">
-                                    <div class="card bg-info text-white mb-4">
-                                        <div class="card-body">Numero de paneles</div>
-                                        <div class="card-footer d-flex align-items-center justify-content-between">
-                                            <input type="number" name="placas" id="placas" step="1" value=1 required>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <center>
-                                    <div class="col-xl-6 col-md-6">
-                                        <div class="card bg-dark text-green mb-4">
-                                            <input class="card-body" type="submit" value="Enviar">
-                                            <div id="loadingAnimation" class="loading hidden"></div>
-                                        </div>
-                                    </div>
-                                </center>
                             </div>
+
+                            <button type="submit" class="btn btn-primary">Cambiar gráfica</button>
+
                         </form>
-                        <div id="resultado"></div>
+
+                    </div>
+
+                    <!-- Aquí va tu gráfica de Bootstrap -->
+
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script>
+                    $(document).ready(function() {
+                        // Captura el evento "change" en los campos del formulario
+                        $("#edificio, #paneles").change(function() {
+                        // Obtén los nuevos valores del formulario
+                        var edificio = $("#edificio").val();
+                        var paneles = $("#paneles").val();
+
+                        // Actualiza la gráfica con los nuevos datos
+                        actualizarGrafica(edificio, paneles);
+                        });
+                    });
+                    </script>
+
+
+
+                        <!-------------------------------------------------------------------------------------------------------------------------------------->
+
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-chart-area me-1"></i>
+                                    Con el tipo de placa actual, se tendrá el siguiente ahorro
+                                </div>
+                                <div class="card-body"><canvas id="myAhorroChart" width="100%" height="30%"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+
                         <!-------------------------------------------------------------------------------------------------------------------------------------->    
                         
-                    </div>
                 </main>
+
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
                         <div class="d-flex align-items-center justify-content-between small">
@@ -220,7 +196,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
-        <?php //include("data/chart-bar-demo.php");?>
+        <?php include("data/grafica-ahorro.php");?>
         
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
