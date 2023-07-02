@@ -1,20 +1,35 @@
 <?php
+// Configuración de la base de datos
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "consumo_ugr";
 
-$graficas = [];
+// Establecer conexión
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-if(!isset($_POST['consu']) && !isset($_POST['gene'])){
-    $_POST['consu']='consumicion';
-    echo "entro tercero <br>";
-}
-if(isset($_POST['consu'])){
-  $graficas[] = $_POST['consu'];
-  echo "entro primero <br>";
-}
-if(isset($_POST['gene'])){
-  $graficas[] = $_POST['gene'];
-  echo "entro segundo <br>";
+// Verificar conexión
+if ($conn->connect_error) {
+    die("Error de conexión: " . $conn->connect_error);
 }
 
-var_dump($graficas);
+// Consulta SQL para obtener los datos
+$sql = "SELECT * FROM citic";
 
+// Ejecutar consulta
+$result = $conn->query($sql);
+
+// Crear un array para almacenar los resultados
+$data = array();
+
+// Recorrer los resultados y agregarlos al array
+while ($row = $result->fetch_assoc()) {
+    $data[] = $row;
+}
+
+// Convertir a formato JSON y devolver la respuesta
+echo json_encode($data);
+
+// Cerrar conexión
+$conn->close();
 ?>

@@ -17,7 +17,6 @@ $fechas = array();
 $consumo = array();
 $generacion = array();
 
-# Si consumo está seleccionado en el checkbox...
 
 $consulta = "SELECT * FROM $edificio WHERE Fecha BETWEEN '$minDate' AND '$maxDate'";
 $lectura = mysqli_query($conn, $consulta);
@@ -26,8 +25,6 @@ while($lecturas = $lectura->fetch_array()){
   $consumo[] = $lecturas["Consumo"];
 }
 
-
-# Si generación está seleccionado en el checkbox...
 
 $consulta = "SELECT * FROM generacion WHERE Fecha BETWEEN '$minDate' AND '$maxDate'";
 $lectura = mysqli_query($conn, $consulta);
@@ -58,10 +55,11 @@ if(count($generacion) > 50){
   
   }
 }
+
 # Si generacion tiene menos de 50 registros, pero consumo tiene mas...
 elseif(count($consumo) > 50){
   # Se crea la granularidad de "generacion" es decir, 1 dato cada día
-  $consumo_resumen = array_fill(0, count($generacion), 0);
+  $consumo_resumen = array_fill(0, count($generacion)-1, 0);
   $generacion_resumen = $generacion;
   $paso = count($consumo)/count($generacion);
   for($i = 0; $i < $paso; $i++){
@@ -110,6 +108,7 @@ var datos = [];
 
 if(graficas.includes('generacion') && graficas.includes('consumo')){
   maximo = encontrarMaximo(generacion, consumo);
+  maximo = Math.round(maximo / 1000) * 1000;
   datos = [
       {
       label: "Consumo",
@@ -141,6 +140,7 @@ if(graficas.includes('generacion') && graficas.includes('consumo')){
 }
 else if(graficas.includes('consumo')){
     maximo = Math.max(...consumo);
+    maximo = Math.round(maximo / 1000) * 1000;
     datos = [
       {
       label: "Consumo",
@@ -159,6 +159,7 @@ else if(graficas.includes('consumo')){
 }
 else if(graficas.includes('generacion')){
   maximo = Math.max(...generacion);
+  maximo = Math.round(maximo / 1000) * 1000;
   datos = [{
       label: "Generacion",
       lineTension: 0.3,

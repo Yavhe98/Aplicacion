@@ -25,9 +25,9 @@ conexion = mysql.connector.connect(
 )
 cursor = conexion.cursor()
 
-
+"""
 # Leer el archivo txt con los datos meteorológicos
-"""with open("data/aemet.txt", "r") as file:
+with open("data/aemet.txt", "r") as file:
     contenido = file.read()
 
 # Lo pasamos a formato JSON
@@ -42,8 +42,10 @@ for registro in data:
     valores = (fecha, sol, tmax, tmin)
     cursor.execute(consulta,valores)
 
-conexion.commit()"""
-
+conexion.commit()
+cursor.close()
+# Cerrar la conexión a la base de datos
+conexion.close()"""
 
 # -------------------------------------------------------- FUNCIONES ----------------------------------------------------- #
 
