@@ -31,8 +31,10 @@
             // Por defecto se mostrará el rango de fechas desde hace un mes hasta el dia de hoy
             $_POST['minDate'] = isset($_POST['minDate']) ? $_POST['minDate'] : '2015-01-01 00:00';
             $_POST['maxDate'] = isset($_POST['maxDate']) ? $_POST['maxDate'] : '2015-12-31 00:00';
+            if(!isset($_POST['consu']) && !isset($_POST['gene'])){
+                $_POST['consu']='consumo';
+            }
             $_POST['edificio'] = isset($_POST['edificio']) ? $_POST['edificio'] : 'citic';
-            $_POST['counter'] = isset($_POST['counter']) ? $_POST['counter'] : 5;
         ?>
 
         <style>
@@ -133,17 +135,18 @@
                             <div class="row">
 
                                 <div class="col-xl-6">
-                                    <div class="form-group">
-                                        <label for="selector">Edificio:</label>
-                                        <select class="form-control" id="edificio" name="edificio">
-                                            <option value="citic">Citic</option>
-                                            <option value="cmaximo">Cmaximo</option>
-                                            <option value="instrumentacion">Instrumentacion</option>
-                                            <option value="mentecerebro">Mente y Cerebro</option>
-                                            <option value="politecnico">Politecnico</option>
-                                            <option value="politicas">Politicas</option>
-                                        </select>
+                                <div class="form-group">
+                                    <label for="selector">Edificio:</label>
+                                    <select class="form-control" id="edificio" name="edificio">
+                                        <option value="citic" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'citic') echo 'selected'; ?>>Citic</option>
+                                        <option value="cmaximo" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'cmaximo') echo 'selected'; ?>>Cmaximo</option>
+                                        <option value="instrumentacion" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'instrumentacion') echo 'selected'; ?>>Instrumentacion</option>
+                                        <option value="mentecerebro" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'mentecerebro') echo 'selected'; ?>>Mente y Cerebro</option>
+                                        <option value="politecnico" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'politecnico') echo 'selected'; ?>>Politecnico</option>
+                                        <option value="politicas" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'politicas') echo 'selected'; ?>>Politicas</option>
+                                    </select>
                                     </div>
+
                                 </div>
 
                             </div>
@@ -152,12 +155,12 @@
 
                                 <div class="col-xl-6">
                                     <label for="fecha-inicio">Desde:</label>
-                                    <input type="datetime-local" class="form-control" id="minDate" name="minDate" value="<?php echo $_POST["minDate"];?>">
+                                    <input type="datetime-local" class="form-control" id="minDate" name="minDate" value="<?php echo $_POST["minDate"];?>" >
                                 </div>
 
                                 <div class="col-xl-6">
                                     <label for="fecha-fin">Hasta:</label>
-                                    <input type="datetime-local" class="form-control" id="maxDate" name="maxDate" value="<?php echo $_POST["maxDate"];?>">
+                                    <input type="datetime-local" class="form-control" id="maxDate" name="maxDate" value="<?php echo $_POST["maxDate"];?>" >
                                 </div>
 
                             </div>
@@ -165,24 +168,24 @@
                             <div class="col-xl-6">
                                 <div class="form-group">
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" name="grafica[]" value="consumo" checked> Consumo
+                                        <input type="checkbox" name="consu" id="consumo" value="consumo" <?php echo !empty($_POST['consu']) ? 'checked="consu"' : ''; ?>> Consumo
                                     </label>
                                     <label class="checkbox-inline">
-                                        <input type="checkbox" name="grafica[]" value="generacion"> Generación
+                                        <input type="checkbox" name="gene" id="generacion" value=generacion <?php echo !empty($_POST['gene']) ? 'checked="gene"' : ''; ?> > Generación
                                     </label>
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Enviar</button>
+                            <button type="submit" onclick="enviarFormulario()" class="btn btn-primary">Enviar</button>
                         </form>
 
 
                         <script>
+
                             $(document).ready(function () {
                                 var dateFormat = "yy-mm-dd";
                                 var startDate = new Date(2015, 0, 1);
                                 var endDate = new Date(2022, 11, 31);
-                                var counter = <?php echo json_encode($_POST["counter"]); ?>;
 
                                 $("#fecha-inicio").datepicker({
                                     dateFormat: dateFormat,
@@ -211,27 +214,6 @@
 
                             });
 
-                            document.addEventListener("DOMContentLoaded", function () {
-                                var counter = <?php echo json_encode($_POST["counter"]);?>;
-                                var counterElement = document.getElementById("counter");
-                                var counterInput = document.getElementById("counter-input");
-                                var btnAdd = document.getElementById("btn-add");
-                                var btnRemove = document.getElementById("btn-remove");
-
-                                btnAdd.addEventListener("click", function () {
-                                    counter++;
-                                    counterElement.textContent = counter;
-                                    counterInput.value = counter;
-                                });
-
-                                btnRemove.addEventListener("click", function () {
-                                    if (counter > 0) {
-                                        counter--;
-                                        counterElement.textContent = counter;
-                                        counterInput.value = counter;
-                                    }
-                                });
-                            });
                         </script>
 
 

@@ -3,11 +3,13 @@ include("bd.php");
 $minDate = $_POST['minDate'] ;
 $maxDate = $_POST['maxDate'] ;
 $edificio = $_POST['edificio'];
-if(isset($_POST['grafica'])){
-  $graficas = $_POST['grafica'];
+$graficas = [];
+
+if(isset($_POST['consu'])){
+  $graficas[] = $_POST['consu'];
 }
-else{
-  $graficas = [];
+if(isset($_POST['gene'])){
+  $graficas[] = $_POST['gene'];
 }
 
 
@@ -33,8 +35,6 @@ while($lecturas = $lectura->fetch_array()){
   $fechas[] = $lecturas["Fecha"];
   $generacion[] = $lecturas["Generacion"];
 }
-
-
 
 
 // DEFINICIÓN DE GRANULARIDAD
@@ -79,8 +79,6 @@ else{
 }
 
 
-$valor_maximo = max(max($generacion_resumen), max($consumo_resumen));
-
 ?>
 
 <script>
@@ -91,9 +89,18 @@ var consumo = <?php echo json_encode($consumo_resumen); ?>
 
 var generacion = <?php echo json_encode($generacion_resumen); ?>
 
-var maximo = <?php echo json_encode($valor_maximo); ?>
-
 var graficas = <?php echo json_encode($graficas); ?>
+
+function encontrarMaximo(array1, array2) {
+  // Combina los dos arreglos en uno solo
+  var arrayCombinado = array1.concat(array2);
+
+  // Encuentra el máximo valor del arreglo combinado
+  var maximo = Math.max(...arrayCombinado);
+
+  // Devuelve el máximo valor
+  return maximo;
+}
 
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
@@ -102,6 +109,7 @@ Chart.defaults.global.defaultFontColor = '#292b2c';
 var datos = [];
 
 if(graficas.includes('generacion') && graficas.includes('consumo')){
+  maximo = encontrarMaximo(generacion, consumo);
   datos = [
       {
       label: "Consumo",
