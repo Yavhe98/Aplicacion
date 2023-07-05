@@ -27,6 +27,7 @@
         <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script-->
         <?php
             include("bd.php"); 
+            session_start();
 
             // Por defecto se mostrará el rango de fechas desde hace un mes hasta el dia de hoy
             $_POST['minDate'] = isset($_POST['minDate']) ? $_POST['minDate'] : '2015-01-01 00:00';
@@ -124,9 +125,9 @@
                 <main>
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">Simulacion</h1>
-                        <!--ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">Placas solares</li>
-                        </ol-->
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active"><?php echo $_SESSION['edificio'];?></li>
+                        </ol>
                         <!------------------------------------------------------------------------------------------------------------------------------------>
 
                         
@@ -134,21 +135,20 @@
 
                             <div class="row">
 
-                                <div class="col-xl-6">
-                                <div class="form-group">
-                                    <label for="selector">Edificio:</label>
-                                    <select class="form-control" id="edificio" name="edificio">
-                                        <option value="citic" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'citic') echo 'selected'; ?>>Citic</option>
-                                        <option value="cmaximo" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'cmaximo') echo 'selected'; ?>>Cmaximo</option>
-                                        <option value="instrumentacion" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'instrumentacion') echo 'selected'; ?>>Instrumentacion</option>
-                                        <option value="mentecerebro" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'mentecerebro') echo 'selected'; ?>>Mente y Cerebro</option>
-                                        <option value="politecnico" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'politecnico') echo 'selected'; ?>>Politecnico</option>
-                                        <option value="politicas" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'politicas') echo 'selected'; ?>>Politicas</option>
-                                    </select>
+                                <!--div class="col-xl-6">
+                                    <div class="form-group">
+                                        <label for="selector">Edificio:</label>
+                                        <select class="form-control" id="edificio" name="edificio">
+                                            <option value="citic" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'citic') echo 'selected'; ?>>Citic</option>
+                                            <option value="cmaximo" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'cmaximo') echo 'selected'; ?>>Cmaximo</option>
+                                            <option value="instrumentacion" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'instrumentacion') echo 'selected'; ?>>Instrumentacion</option>
+                                            <option value="mentecerebro" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'mentecerebro') echo 'selected'; ?>>Mente y Cerebro</option>
+                                            <option value="politecnico" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'politecnico') echo 'selected'; ?>>Politecnico</option>
+                                            <option value="politicas" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'politicas') echo 'selected'; ?>>Politicas</option>
+                                        </select>
                                     </div>
-
-                                </div>
-
+                                </div-->
+                                
                             </div>
 
                             <div class="row">
@@ -197,21 +197,6 @@
                                     defaultDate: endDate
                                 });
 
-                                $("#slider-range").slider({
-                                    range: true,
-                                    min: startDate.getTime(),
-                                    max: endDate.getTime(),
-                                    values: [startDate.getTime(), endDate.getTime()],
-                                    slide: function (event, ui) {
-                                        var minDate = new Date(ui.values[0]);
-                                        var maxDate = new Date(ui.values[1]);
-
-                                        $("#fecha-inicio").datepicker("setDate", minDate);
-                                        $("#fecha-fin").datepicker("setDate", maxDate);
-                                    }
-                                });
-
-
                             });
 
                         </script>
@@ -224,128 +209,81 @@
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-area me-1"></i>
-                                        Area Chart Example
+                                        Consumo y generación
                                     </div>
                                     <div class="card-body"><canvas id="myLineChart" width="100%" height="40%"></canvas></div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-------------------------------------------------------------------------------------------------------------------------------------->    
+                        <!-------------------------------------------------------------------------------------------------------------------------------------->
+
+                        <?php
+                            $fechas = array();
+                            $consumos = array();
+                            $nombres = array();
+
+                            $edificios = ["citic", "cmaximo", "instrumentacion", "mentecerebro", "politecnico", "politicas"];
+
+                            foreach($edificios as $e){
+                                $consulta = "SELECT Nombre, Fecha, Consumo FROM datos_edificio JOIN $e USING(id) ORDER BY Consumo DESC LIMIT 50";
+                                $lectura = mysqli_query($conn, $consulta);
+                                while($lecturas = $lectura -> fetch_array()){
+                                    $nombres[] = $lecturas["Nombre"];
+                                    $fechas[] = $lecturas["Fecha"];
+                                    $consumos[] = $lecturas["Consumo"];
+                                }
+                                
+                                $consulta = "SELECT Nombre, Fecha, Consumo FROM datos_edificio JOIN $e USING(id) ORDER BY Consumo ASC LIMIT 50";
+                                $lectura = mysqli_query($conn, $consulta);
+                                while($lecturas = $lectura -> fetch_array()){
+                                    $nombres[] = $lecturas["Nombre"];
+                                    $fechas[] = $lecturas["Fecha"];
+                                    $consumos[] = $lecturas["Consumo"];
+                                }
+                                
+                            }
+
+                        ?>
+
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                DataTable Example
+                                Edificios que mas consumen
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
+                                            <th>Edificio</th>
+                                            <th>Fecha</th>
+                                            <th>Consumo</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
+                                            <th>Edificio</th>
+                                            <th>Fecha</th>
+                                            <th>Consumo</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>61</td>
-                                            <td>2011/04/25</td>
-                                            <td>$320,800</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Garrett Winters</td>
-                                            <td>Accountant</td>
-                                            <td>Tokyo</td>
-                                            <td>63</td>
-                                            <td>2011/07/25</td>
-                                            <td>$170,750</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Ashton Cox</td>
-                                            <td>Junior Technical Author</td>
-                                            <td>San Francisco</td>
-                                            <td>66</td>
-                                            <td>2009/01/12</td>
-                                            <td>$86,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Cedric Kelly</td>
-                                            <td>Senior Javascript Developer</td>
-                                            <td>Edinburgh</td>
-                                            <td>22</td>
-                                            <td>2012/03/29</td>
-                                            <td>$433,060</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Airi Satou</td>
-                                            <td>Accountant</td>
-                                            <td>Tokyo</td>
-                                            <td>33</td>
-                                            <td>2008/11/28</td>
-                                            <td>$162,700</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Brielle Williamson</td>
-                                            <td>Integration Specialist</td>
-                                            <td>New York</td>
-                                            <td>61</td>
-                                            <td>2012/12/02</td>
-                                            <td>$372,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Herrod Chandler</td>
-                                            <td>Sales Assistant</td>
-                                            <td>San Francisco</td>
-                                            <td>59</td>
-                                            <td>2012/08/06</td>
-                                            <td>$137,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Rhona Davidson</td>
-                                            <td>Integration Specialist</td>
-                                            <td>Tokyo</td>
-                                            <td>55</td>
-                                            <td>2010/10/14</td>
-                                            <td>$327,900</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Colleen Hurst</td>
-                                            <td>Javascript Developer</td>
-                                            <td>San Francisco</td>
-                                            <td>39</td>
-                                            <td>2009/09/15</td>
-                                            <td>$205,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Sonya Frost</td>
-                                            <td>Software Engineer</td>
-                                            <td>Edinburgh</td>
-                                            <td>23</td>
-                                            <td>2008/12/13</td>
-                                            <td>$103,600</td>
-                                        </tr>
+                                        <?php
+                                            $registros = count($nombres);
+                                            for($i=0; $i< $registros; $i++) {
+                                                echo "<tr>
+                                                    <td>".$nombres[$i]."</td>
+                                                    <td>".$fechas[$i]."</td>
+                                                    <td>".$consumos[$i]."</td>
+                                                </tr>";
+                                            }
+                                        ?>
 
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-
+                    </div>
                 </main>
 
                 <footer class="py-4 bg-light mt-auto">

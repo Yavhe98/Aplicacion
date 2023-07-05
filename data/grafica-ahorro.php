@@ -53,6 +53,8 @@ var maximo = <?php echo json_encode($valor_maximo); ?>
 Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#292b2c';
 
+maximo = Math.round(maximo / 1000) * 1000;
+
 // Bar Chart Example
 var ctx = document.getElementById("myAhorroChart");
 var myLineChart = new Chart(ctx, {

@@ -8,7 +8,7 @@ import sys
 import math
 
 if len(sys.argv) != 4:
-    print("Error: Se requieren tres parámetros. No", len(sys.argv)-1)
+    print("Error: Se requieren tres parámetros. No", len(sys.argv))
     sys.exit(1)
 
 eficiencia = float(sys.argv[1])
@@ -99,10 +99,7 @@ for fila in aemet:
     tmax.append(fila[2])
     tmin.append(fila[3])
 
-#consulta = "SELECT AVG(TotalConsumo) FROM (SELECT DATE(Fecha) AS Fecha, SUM(Consumo) AS TotalConsumo FROM citic GROUP BY DATE(Fecha) ORDER BY TotalConsumo DESC LIMIT 20) AS subconsulta;"
-
-consulta = "SELECT AVG(TotalConsumo) FROM (SELECT DATE(Fecha) AS Fecha, SUM(Consumo) AS TotalConsumo FROM citic GROUP BY DATE(Fecha) ) AS subconsulta;"
-
+consulta = "SELECT AVG(Consumo) FROM (SELECT Consumo FROM %s ORDER BY Consumo DESC LIMIT 20) as topconsumo" % (edificio)
 cursor.execute(consulta)
 consumo = cursor.fetchall()
 
@@ -132,8 +129,8 @@ for i in range(registros):
 for i in range(registros):
     radiacion_solar.append(HS(radiacion_extraterrestre[i],tmax[i],tmin[i]))
 
-# Hallar el número de paneles necesarios para cubrir la media de los 5 días con mayor consumo
-# Se calculará a partir de la media de los 5 días con mayor consumo, la eficiencia de la placa, el area y la media de radiación solar en granada
+# Hallar el número de paneles necesarios para cubrir la media de los 10 días con mayor consumo
+# Se calculará a partir de la media de los 25 días con mayor consumo, la eficiencia de la placa, el area y la media de radiación solar en granada
 media_ra = np.mean(radiacion_solar)
 numero = int(math.ceil(consumo / (media_ra * eficiencia * area)))
 

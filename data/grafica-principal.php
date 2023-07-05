@@ -3,7 +3,7 @@ include("bd.php");
 $minDate = $_POST['minDate'] ;
 $maxDate = $_POST['maxDate'] ;
 $edificio = $_POST['edificio'];
-$graficas = [];
+$graficas = array();
 
 if(isset($_POST['consu'])){
   $graficas[] = $_POST['consu'];
@@ -17,6 +17,8 @@ $fechas = array();
 $consumo = array();
 $generacion = array();
 
+$consumo_resumen = array();
+$generacion_resumen = array();
 
 $consulta = "SELECT * FROM $edificio WHERE Fecha BETWEEN '$minDate' AND '$maxDate'";
 $lectura = mysqli_query($conn, $consulta);
@@ -29,52 +31,108 @@ while($lecturas = $lectura->fetch_array()){
 $consulta = "SELECT * FROM generacion WHERE Fecha BETWEEN '$minDate' AND '$maxDate'";
 $lectura = mysqli_query($conn, $consulta);
 while($lecturas = $lectura->fetch_array()){
-  $fechas[] = $lecturas["Fecha"];
+  //$fechas[] = $lecturas["Fecha"];
   $generacion[] = $lecturas["Generacion"];
 }
 
 
-// DEFINICIÓN DE GRANULARIDAD
+// DEFINICIÓN DE GRANULARIDAD: 6 casos mirar GoodNotes (IDEAS)
 
 // Si generacion (el array mas pequeño) tiene mas de 50 registros...
-if(count($generacion) > 50){
-  $consumo_resumen = array_fill(0, 50, 0);
-  $generacion_resumen = array_fill(0, 50, 0);
-  $paso_con = count($consumo) /50;
-  $paso_gen = count($generacion)/50;
-  for($i = 0; $i < 50; $i++){
 
-    for($c=0; $c < $paso_con; $c++){
-      $consumo_resumen[$i] += $consumo[round(($i*$paso_con)+$c)];
-      $fechas_resumen[$i] = $fechas[round(($i*$paso_con)+$c)];
+if(in_array('consumo', $graficas)){
+  if(in_array('generacion', $graficas)){
+
+    # Consumo y Generacion
+    if(count($generacion) > 50 && count($generacion) > 50){
+      $consumo_resumen = array_fill(0, 50, 0);
+      $generacion_resumen = array_fill(0, 50, 0);
+      $paso_con = count($consumo) /50;
+      $paso_gen = count($generacion)/50;
+      
+      for($i = 0; $i < 50; $i++){
+        # Agrupar los datos en 50
+        for($c=0; $c < $paso_con; $c++){
+          $consumo_resumen[$i] += $consumo[($i*$paso_con)+$c];
+          $fechas_resumen[$i] = $fechas[($i*$paso_con)+$c];
+        }
+    
+        for($g=0; $g < $paso_gen; $g++){
+          $generacion_resumen[$i] += $generacion[($i*$paso_gen)+$g];
+        }
+      
+      }
+    }
+    
+    # Si generacion tiene menos de 50 registros
+    elseif(count($generacion) < 50){
+      # Se crea la granularidad de "generacion" es decir, 1 dato cada día
+      $consumo_resumen = array_fill(0, count($generacion), 0);
+
+      $paso = count($consumo)/count($generacion);
+      for($i = 0; $i < count($generacion); $i++){
+        for($j = 0; $j < $paso; $j++){
+          $consumo_resumen[$i] += $consumo[($i*$paso)+$j];
+          $fechas_resumen[$i] = $fechas[($i*$paso)+$j];
+        }
+        $generacion_resumen[$i] = round($generacion[$i]);
+      }
     }
 
-    for($g=0; $g < $paso_gen; $g++){
-      $generacion_resumen[$i] += $generacion[round(($i*$paso_gen)+$g)];
+  }
+  else{
+    # Consumo
+    if(count($consumo) > 50){
+      $consumo_resumen = array_fill(0, 50, 0);
+      for($i = 0; $i < 50; $i++){
+        # Agrupar los datos en 50
+        $paso_con = count($consumo) /50;
+        for($c=0; $c < $paso_con; $c++){
+          $consumo_resumen[$i] += $consumo[($i*$paso_con)+$c];
+          $fechas_resumen[$i] = $fechas[($i*$paso_con)+$c];
+        }
+      }
     }
-  
+    elseif(count($consumo < 50)){
+      for($i=0; $i < count($consumo);$i++){
+        $consumo_resumen[$i] = round($consumo[$i]);
+        $fechas[$i] = $fechas[$i];
+      }
+    }
   }
 }
 
-# Si generacion tiene menos de 50 registros, pero consumo tiene mas...
-elseif(count($consumo) > 50){
-  # Se crea la granularidad de "generacion" es decir, 1 dato cada día
-  $consumo_resumen = array_fill(0, count($generacion)-1, 0);
-  $generacion_resumen = $generacion;
-  $paso = count($consumo)/count($generacion);
-  for($i = 0; $i < $paso; $i++){
-    for($j = 0; $j < $paso; $j++){
-      $consumo_resumen[$i] += $consumo[round(($i*$paso)+$j)];
-      $fechas_resumen[$i] = $fechas[round(($i*$paso)+$j)];
+else{ # Consumo desactivado
+
+  /*$consulta = "SELECT * FROM generacion WHERE Fecha BETWEEN '$minDate' AND '$maxDate'";
+  $lectura = mysqli_query($conn, $consulta);
+  while($lecturas = $lectura->fetch_array()){
+    $fechas[] = $lecturas["Fecha"];
+    $generacion[] = $lecturas["Generacion"];
+  }*/
+
+  if(in_array('generacion', $graficas)){
+    # Generacion
+    if(count($generacion) > 50){
+      $generacion_resumen = array_fill(0, 50, 0);
+      for($i = 0; $i < 50; $i++){
+        # Agrupar los datos en 50
+        $paso_gen = count($generacion) /50;
+        for($c=0; $c < $paso_gen; $c++){
+          $generacion_resumen[$i] += $generacion[round(($i*$paso_gen)+$c)];
+          $fechas_resumen[$i] = $fechas[round(($i*$paso_gen)+$c)];
+        }
+      }
+    }
+    elseif(count($generacion) < 50){
+      for($i=0; $i < count($generacion);$i++){
+        $generacion_resumen[] = round($generacion[$i]);
+        $fechas_resumen[$i] = $fechas[$i];
+      }
     }
   }
 }
-# Si los dos tienen menos de 50... 
-else{
-  $consumo_resumen = $consumo;
-  $generacion_resumen = $generacion;
-  $fechas_resumen = $fechas;
-}
+
 
 
 ?>
@@ -96,6 +154,16 @@ function encontrarMaximo(array1, array2) {
   // Encuentra el máximo valor del arreglo combinado
   var maximo = Math.max(...arrayCombinado);
 
+  if(maximo < 100){
+    maximo = 100;
+  }
+  else if(maximo > 1000){
+    maximo = Math.ceil(maximo / 1000) * 1000;
+  }
+  else{
+    maximo = Math.ceil(maximo / 100) * 100;
+  }
+
   // Devuelve el máximo valor
   return maximo;
 }
@@ -108,9 +176,9 @@ var datos = [];
 
 if(graficas.includes('generacion') && graficas.includes('consumo')){
   maximo = encontrarMaximo(generacion, consumo);
-  maximo = Math.round(maximo / 1000) * 1000;
+  
   datos = [
-      {
+    {
       label: "Consumo",
       lineTension: 0.3,
       backgroundColor: "rgba(255, 0, 0, 0.35)",
@@ -123,7 +191,8 @@ if(graficas.includes('generacion') && graficas.includes('consumo')){
       pointHitRadius: 50,
       pointBorderWidth: 2,
       data: consumo,
-    },{
+    },
+    {
       label: "Generacion",
       lineTension: 0.3,
       backgroundColor: "rgba(0, 230, 0, 0.45)",
@@ -136,11 +205,12 @@ if(graficas.includes('generacion') && graficas.includes('consumo')){
       pointHitRadius: 50,
       pointBorderWidth: 2,
       data: generacion,
-    }];
+    }
+  ];
 }
 else if(graficas.includes('consumo')){
     maximo = Math.max(...consumo);
-    maximo = Math.round(maximo / 1000) * 1000;
+    maximo = Math.ceil(maximo / 1000) * 1000;
     datos = [
       {
       label: "Consumo",
@@ -159,7 +229,7 @@ else if(graficas.includes('consumo')){
 }
 else if(graficas.includes('generacion')){
   maximo = Math.max(...generacion);
-  maximo = Math.round(maximo / 1000) * 1000;
+  maximo = Math.ceil(maximo / 1000) * 1000;
   datos = [{
       label: "Generacion",
       lineTension: 0.3,
@@ -186,6 +256,9 @@ var myLineChart = new Chart(ctx, {
 
   },
   options: {
+    animation: {
+      duration: 0 // Desactiva la animación inicial
+    },
     scales: {
       xAxes: [{
         time: {
@@ -210,8 +283,10 @@ var myLineChart = new Chart(ctx, {
       }],
     },
     legend: {
-      display: false
+      display: true
     }
   }
 });
+
+
 </script>

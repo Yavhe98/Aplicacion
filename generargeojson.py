@@ -1,16 +1,20 @@
+# Archivo que se ejecuta en bucle infinito para tener el archivo datos_edificio.geojson actualizado cada hora
+# Actualiza el consumo de todos los edificios
+
 import mysql.connector
 import geojson
 import time
 
-def generar_geojson():
+# Establecer la conexión con la base de datos MySQL
+conexion = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="",
+    database="consumo_ugr",
+    multi=True
+)
 
-    # Establecer la conexión con la base de datos MySQL
-    conexion = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="",
-        database="consumo_ugr"
-    )
+def generar_geojson():
 
     # Crear un cursor y ejecutar una consulta SQL
     cursor = conexion.cursor()
@@ -52,10 +56,40 @@ def generar_geojson():
 
     # Cerrar el cursor y la conexión
     cursor.close()
-    conexion.close()
+    #conexion.close()
+
+def actualizarCitic():
+    cursor = conexion.cursor()
+
+    # Consulta SQL para generar registros simulados
+    sql = """
+    set @fecha_hoy = CURDATE();
+    INSERT INTO citic (Fecha, Consumo)
+    SELECT fechas.Fecha, FLOOR(50 + RAND() * 51) AS valor
+    FROM (
+        SELECT DATE_ADD(MAX(citic.Fecha), INTERVAL 1 DAY) AS Fecha
+        FROM citic
+    ) AS fechas
+    CROSS JOIN (
+        SELECT @fecha_hoy AS Fecha
+    ) AS fecha_hoy
+    WHERE fechas.Fecha < @fecha_hoy
+    """
+
+    # Ejecutar la consulta
+    cursor.execute(sql)
+
+    # Confirmar los cambios
+    conexion.commit()
+
+    # Cerrar el cursor y la conexión
+    cursor.close()
+    #conexion.close()
+
 
 intervalo_tiempo = 3600
 
 while True:
     generar_geojson()
+    actualizarCitic()
     time.sleep(intervalo_tiempo)

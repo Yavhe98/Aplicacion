@@ -19,7 +19,10 @@
 
         <!-- Bootstrap JS -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+        <?php 
+            session_start();
+            $_POST['edificio'] = isset($_POST['edificio']) ? $_POST['edificio'] : 'citic'; 
+        ?>
     <style>
         .loading {
             width: 20px;
@@ -53,7 +56,7 @@
 
                 var eficiencia = $('#eficiencia').val();
                 var area = $('#area').val();
-                var placas = $('#placas').val();
+                var edificio = $('#edificio').val();
 
                 $.ajax({
                     type: 'POST',
@@ -61,7 +64,7 @@
                     data: {
                         eficiencia: eficiencia,
                         area: area,
-                        placas: placas
+                        edificio: edificio
                     },
                     success: function(response) {
                         // Procesar la respuesta del servidor
@@ -180,9 +183,16 @@
 
                                 <div class="col-xl-4 col-md-6">
                                     <div class="card bg-info text-white mb-4">
-                                        <div class="card-body">Numero de paneles</div>
+                                        <div class="card-body">Edificio</div>
                                         <div class="card-footer d-flex align-items-center justify-content-between">
-                                            <input type="number" name="placas" id="placas" step="1" value=1 required>
+                                        <select class="form-control" id="edificio" name="edificio">
+                                            <option value="citic" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'citic') echo 'selected'; ?>>Citic</option>
+                                            <option value="cmaximo" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'cmaximo') echo 'selected'; ?>>Cmaximo</option>
+                                            <option value="instrumentacion" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'instrumentacion') echo 'selected'; ?>>Instrumentacion</option>
+                                            <option value="mentecerebro" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'mentecerebro') echo 'selected'; ?>>Mente y Cerebro</option>
+                                            <option value="politecnico" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'politecnico') echo 'selected'; ?>>Politecnico</option>
+                                            <option value="politicas" <?php if(isset($_POST['edificio']) && $_POST['edificio'] === 'politicas') echo 'selected'; ?>>Politicas</option>
+                                        </select>
                                         </div>
                                     </div>
                                 </div>
@@ -198,6 +208,8 @@
                             </div>
                         </form>
                         <div id="resultado"></div>
+
+                        
                         <!-------------------------------------------------------------------------------------------------------------------------------------->    
                         
                     </div>

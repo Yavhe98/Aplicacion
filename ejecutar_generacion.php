@@ -1,11 +1,17 @@
 <?php
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    session_start();
     $ef = $_POST["eficiencia"];
     $ar = $_POST["area"];
-    $num = $_POST["placas"];
+    $edificio = $_POST["edificio"];
 
-    $comando = "python calculo_generacion.py " . escapeshellarg($ef) . " " . escapeshellarg($ar) . " " . escapeshellarg($num);
+    $_SESSION['edificio'] = $edificio;
+
+    $comando = "python .\calculo_generacion.py " . escapeshellarg($ef) . " " . escapeshellarg($ar) . " " . escapeshellarg($edificio);
     $resultado = shell_exec($comando);
-    echo "Resultado de Python: $resultado";
+    echo "Se recomiendan: $resultado paneles solares en $edificio para una generación óptima";
+
 }
 ?>
