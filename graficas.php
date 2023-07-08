@@ -34,6 +34,7 @@
             $_POST['maxDate'] = isset($_POST['maxDate']) ? $_POST['maxDate'] : '2015-12-31 00:00';
             if(!isset($_POST['consu']) && !isset($_POST['gene'])){
                 $_POST['consu']='consumo';
+                $_POST['gene']='generacion';
             }
             $_POST['edificio'] = isset($_POST['edificio']) ? $_POST['edificio'] : 'citic';
         ?>
@@ -53,13 +54,14 @@
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
-            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+            <!--form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
                 <div class="input-group">
                     <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
                     <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
                 </div>
-            </form>
-            <!-- Navbar-->
+            </form-->
+
+            <!-- Navbar
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
@@ -70,7 +72,7 @@
                         <li><a class="dropdown-item" href="#!">Logout</a></li>
                     </ul>
                 </li>
-            </ul>
+            </ul-->
         </nav>
         
         <div id="layoutSidenav">
@@ -79,7 +81,13 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
 
-                            <div class="sb-sidenav-menu-heading">Principal</div>
+                        <div class="sb-sidenav-menu-heading">Principal</div>
+                            <a class="nav-link" href="index.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-map"></i></div>
+                                Inicio
+                            </a>
+                            
+                            
                             <a class="nav-link" href="mapa.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-map"></i></div>
                                 Mapa
@@ -124,9 +132,9 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Simulacion</h1>
+                        <h1 class="mt-4">Generación y Consumo de Energía UGR</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active"><?php echo $_SESSION['edificio'];?></li>
+                            <li class="breadcrumb-item active"><?php echo "Edificio " . $_SESSION['edificio'] . " con " . $_SESSION['paneles'] . " paneles";?></li>
                         </ol>
                         <!------------------------------------------------------------------------------------------------------------------------------------>
 

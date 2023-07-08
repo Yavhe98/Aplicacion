@@ -5,16 +5,15 @@ import mysql.connector
 import geojson
 import time
 
-# Establecer la conexión con la base de datos MySQL
-conexion = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="consumo_ugr",
-    multi=True
-)
 
 def generar_geojson():
+    # Establecer la conexión con la base de datos MySQL
+    conexion = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="",
+        database="consumo_ugr"
+    )
 
     # Crear un cursor y ejecutar una consulta SQL
     cursor = conexion.cursor()
@@ -56,13 +55,13 @@ def generar_geojson():
 
     # Cerrar el cursor y la conexión
     cursor.close()
-    #conexion.close()
+    conexion.close()
 
-def actualizarCitic():
+"""def actualizarCitic():
     cursor = conexion.cursor()
 
     # Consulta SQL para generar registros simulados
-    sql = """
+    sql = ""
     set @fecha_hoy = CURDATE();
     INSERT INTO citic (Fecha, Consumo)
     SELECT fechas.Fecha, FLOOR(50 + RAND() * 51) AS valor
@@ -74,7 +73,7 @@ def actualizarCitic():
         SELECT @fecha_hoy AS Fecha
     ) AS fecha_hoy
     WHERE fechas.Fecha < @fecha_hoy
-    """
+    ""
 
     # Ejecutar la consulta
     cursor.execute(sql)
@@ -84,12 +83,10 @@ def actualizarCitic():
 
     # Cerrar el cursor y la conexión
     cursor.close()
-    #conexion.close()
+"""
 
-
-intervalo_tiempo = 3600
+intervalo_tiempo = 600
 
 while True:
     generar_geojson()
-    actualizarCitic()
     time.sleep(intervalo_tiempo)

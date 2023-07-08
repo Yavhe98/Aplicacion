@@ -1,5 +1,5 @@
 <?php
-include("bd.php");
+
 $minDate = $_POST['minDate'] ;
 $maxDate = $_POST['maxDate'] ;
 $edificio = $_POST['edificio'];

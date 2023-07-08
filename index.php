@@ -23,28 +23,6 @@
             session_start();
             $_POST['edificio'] = isset($_POST['edificio']) ? $_POST['edificio'] : 'citic'; 
         ?>
-    <style>
-        .loading {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 3px solid #fff;
-            border-top-color: transparent;
-            animation: spin 1s linear infinite;
-            margin-left: 10px;
-            display: inline-block;
-            }
-
-            @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-            }
-
-            .hidden {
-            display: none;
-            }
-        </style>
 
     </head>
 
@@ -57,7 +35,8 @@
                 var eficiencia = $('#eficiencia').val();
                 var area = $('#area').val();
                 var edificio = $('#edificio').val();
-
+                document.querySelector('#prueba').classList.remove('d-none');
+                document.querySelector('.text').innerText='Buscando configuración más óptima';
                 $.ajax({
                     type: 'POST',
                     url: 'ejecutar_generacion.php',
@@ -68,6 +47,7 @@
                     },
                     success: function(response) {
                         // Procesar la respuesta del servidor
+                        document.querySelector('#prueba').innerText='';
                         $('#resultado').html(response);
                     }
                 });
@@ -83,13 +63,13 @@
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
-            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+            <!--form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
                 <div class="input-group">
                     <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
                     <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
                 </div>
-            </form>
-            <!-- Navbar-->
+            </form-->
+            <!-- Navbar
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
@@ -100,7 +80,7 @@
                         <li><a class="dropdown-item" href="#!">Logout</a></li>
                     </ul>
                 </li>
-            </ul>
+            </ul-->
         </nav>
         
         <div id="layoutSidenav">
@@ -110,6 +90,12 @@
                         <div class="nav">
 
                             <div class="sb-sidenav-menu-heading">Principal</div>
+                            <a class="nav-link" href="index.php">
+                                <div class="sb-nav-link-icon"><i class="fas fa-map"></i></div>
+                                Inicio
+                            </a>
+                            
+                            
                             <a class="nav-link" href="mapa.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-map"></i></div>
                                 Mapa
@@ -203,6 +189,10 @@
                                             <input class="card-body" type="submit" value="Enviar">
                                             <div id="loadingAnimation" class="loading hidden"></div>
                                         </div>
+                                    </div>
+                                    <div id='prueba' class='d-none'>
+                                        <img src="/assets/img/charging.gif" alt="" width='10%'>
+                                        <p class='text'></p>
                                     </div>
                                 </center>
                             </div>

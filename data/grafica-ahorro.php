@@ -1,5 +1,4 @@
 <?php
-include("bd.php");
 
 $coste = 0.34;  # €/kWh
 
@@ -10,13 +9,14 @@ $consumo = array();
 $generacion = array();
 $ahorro = array();
 
-$consulta = "SELECT AVG(Consumo) AS 'consumo_medio' FROM $edificio WHERE YEAR(Fecha) = 2015 GROUP BY MONTH(Fecha)";
+# Recoge la media de consumo por mes del edificio seleccionado
+$consulta = "SELECT SUM(Consumo) AS 'consumo_medio' FROM $edificio WHERE YEAR(Fecha) = 2015 GROUP BY MONTH(Fecha)";
 $lectura = mysqli_query($conn, $consulta);
 while($lecturas = $lectura->fetch_array()){
   $consumo[] = $lecturas["consumo_medio"];
 }
 
-$consulta = "SELECT AVG(Generacion) AS 'generacion_media' FROM generacion WHERE YEAR(Fecha) = 2015 GROUP BY MONTH(Fecha)";
+$consulta = "SELECT SUM(Generacion) AS 'generacion_media' FROM generacion WHERE YEAR(Fecha) = 2015 GROUP BY MONTH(Fecha)";
 $lectura = mysqli_query($conn, $consulta);
 while($lecturas = $lectura->fetch_array()){
   $generacion[] = $lecturas["generacion_media"] * $paneles;
@@ -35,10 +35,10 @@ for($i = 0; $i < 12; $i++){
 }
 
 foreach ($ahorro as &$a) {
-  $a = $a * $paneles;
+  $a = round($a * $paneles, 2);
 }
 
-$valor_maximo = max($ahorro);
+$valor_maximo = ceil(max($ahorro)/1000000)*1000000;
 
 ?>
 

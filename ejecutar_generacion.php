@@ -8,10 +8,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $edificio = $_POST["edificio"];
 
     $_SESSION['edificio'] = $edificio;
-
+    
     $comando = "python .\calculo_generacion.py " . escapeshellarg($ef) . " " . escapeshellarg($ar) . " " . escapeshellarg($edificio);
     $resultado = shell_exec($comando);
-    echo "Se recomiendan: $resultado paneles solares en $edificio para una generación óptima";
+    echo "<h5><mark>Se recomiendan: $resultado paneles solares en $edificio para una generación óptima</mark></h5>";
+    $_SESSION['paneles'] = $resultado;
 
 }
 ?>
