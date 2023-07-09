@@ -125,60 +125,46 @@
                         </ol-->
                         <!------------------------------------------------------------------------------------------------------------------------------------>
 
-                        <form action='#' method="POST">
-                            <div class="row">
-                            <div class="col-xl-6">
-                                <div class="form-group">
-                                <label for="edificio">Seleccione edificio:</label>
-                                <select class="form-control" id="edificio" name="edificio">
-                                    <option value="citic">Citic</option>
-                                    <option value="cmaximo">Cmaximo</option>
-                                    <option value="instrumentacion">Instrumentacion</option>
-                                    <option value="mentecerebro">Mente y Cerebro</option>
-                                    <option value="politecnico">Politecnico</option>
-                                    <option value="politicas">Politicas</option>
-                                </select>
-                                </div>
+                        <form id="contact-form">
+
+                            <div class=row>
+                                <label for="name">Nombre:</label>
+                                <input type="text" id="name" name="name" required>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Cambiar gráfica</button>
+                            <div class=row>
+                                <label for="email">Correo electrónico:</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
 
+                            <div class=row>
+                                <label for="message">Mensaje:</label>
+                                <textarea id="message" name="message" rows="4" required></textarea>
+                            </div>
+
+                            <input type="submit" value="Enviar">
+                            
                         </form>
 
-                    </div>
+                        <script>
+                            document.getElementById("contact-form").addEventListener("submit", function(event) {
+                            event.preventDefault(); // Evita el envío del formulario predeterminado
 
-                    <!-- Aquí va tu gráfica de Bootstrap -->
+                            // Obtiene los valores de los campos del formulario
+                            var name = document.getElementById("name").value;
+                            var email = document.getElementById("email").value;
+                            var message = document.getElementById("message").value;
 
-                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                    <script>
-                    $(document).ready(function() {
-                        // Captura el evento "change" en los campos del formulario
-                        $("#edificio, #paneles").change(function() {
-                        // Obtén los nuevos valores del formulario
-                        var edificio = $("#edificio").val();
-                        var paneles = $("#paneles").val();
+                            // Construye el enlace de correo electrónico con los valores del formulario
+                            var mailtoLink = "mailto:enri1998@hotmail.com" +
+                            "?subject=" + encodeURIComponent("Mensaje de contacto") +
+                            "&body=" + encodeURIComponent("Nombre: " + name + "\n\nCorreo electrónico: " + email + "\n\nMensaje: " + message);
 
-                        // Actualiza la gráfica con los nuevos datos
-                        actualizarGrafica(edificio, paneles);
+                            // Abre el enlace de correo electrónico en una nueva ventana o pestaña
+                            window.open(mailtoLink, "_blank");
                         });
-                    });
-                    </script>
 
-
-
-                        <!-------------------------------------------------------------------------------------------------------------------------------------->
-
-                    <div class="row">
-                        <div class="col-xl-12">
-                            <div class="card mb-4">
-                                <div class="card-header">
-                                    <i class="fas fa-chart-area me-1"></i>
-                                    Con el tipo de placa actual, y a 0,34€/kWh, se tendrá el siguiente ahorro
-                                </div>
-                                <div class="card-body"><canvas id="myAhorroChart" width="100%" height="30%"></canvas></div>
-                            </div>
-                        </div>
-                    </div>
+                        </script>
 
                         <!-------------------------------------------------------------------------------------------------------------------------------------->    
                         
@@ -202,9 +188,15 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
-        <?php include("data/grafica-ahorro.php");?>
         
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
     </body>
 </html>
+
+
+
+
+
+
+

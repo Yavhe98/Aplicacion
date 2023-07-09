@@ -113,7 +113,7 @@
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Addons</div>
-                            <a class="nav-link" href="charts.html">
+                            <a class="nav-link" href="contacto.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                 Contacto
                             </a>
@@ -189,6 +189,21 @@
 
 
                         <script>
+                            const minDateInput = document.getElementById('minDate');
+                            const maxDateInput = document.getElementById('maxDate');
+                            minDateInput.addEventListener('input', validarFechas);
+                            maxDateInput.addEventListener('input', validarFechas);
+
+                            function validarFechas() {
+                                const minDate = new Date(minDateInput.value);
+                                const maxDate = new Date(maxDateInput.value);
+
+                                if (minDate > maxDate) {
+                                    maxDateInput.setCustomValidity('La fecha de fin debe ser posterior a la fecha de inicio');
+                                } else {
+                                    maxDateInput.setCustomValidity('');
+                                }
+                            }
 
                             $(document).ready(function () {
                                 var dateFormat = "yy-mm-dd";

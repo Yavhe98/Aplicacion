@@ -101,7 +101,7 @@ for fila in aemet:
 
 #consulta = "SELECT AVG(TotalConsumo) FROM (SELECT DATE(Fecha) AS Fecha, SUM(Consumo) AS TotalConsumo FROM citic GROUP BY DATE(Fecha) ORDER BY TotalConsumo DESC LIMIT 20) AS subconsulta;"
 
-consulta = "SELECT AVG(TotalConsumo) FROM (SELECT DATE(Fecha) AS Fecha, SUM(Consumo) AS TotalConsumo FROM citic GROUP BY DATE(Fecha) ) AS subconsulta;"
+consulta = "SELECT AVG(TotalConsumo) FROM (SELECT DATE(Fecha) AS Fecha, SUM(Consumo) AS TotalConsumo FROM " + edificio + " GROUP BY DATE(Fecha) ) AS subconsulta;"
 
 cursor.execute(consulta)
 consumo = cursor.fetchall()
@@ -144,6 +144,7 @@ for i in range(registros):
 generacion = list(map(float, generaciones))
 
 # Insertar la radiación solar diaria en la base de datos
+
 consulta = "TRUNCATE TABLE generacion"
 cursor.execute(consulta)
 conexion.commit()

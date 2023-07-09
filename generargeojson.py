@@ -85,7 +85,7 @@ def generar_geojson():
     cursor.close()
 """
 
-intervalo_tiempo = 600
+intervalo_tiempo = 5
 
 while True:
     generar_geojson()

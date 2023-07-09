@@ -9,7 +9,7 @@ $consumo = array();
 $generacion = array();
 $ahorro = array();
 
-# Recoge la media de consumo por mes del edificio seleccionado
+# Recoge la suma de consumo por mes del edificio seleccionado
 $consulta = "SELECT SUM(Consumo) AS 'consumo_medio' FROM $edificio WHERE YEAR(Fecha) = 2015 GROUP BY MONTH(Fecha)";
 $lectura = mysqli_query($conn, $consulta);
 while($lecturas = $lectura->fetch_array()){

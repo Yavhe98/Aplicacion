@@ -21,7 +21,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <?php 
             session_start();
-            $_POST['edificio'] = isset($_POST['edificio']) ? $_POST['edificio'] : 'citic'; 
+            //$_POST['edificio'] = isset($_POST['edificio']) ? $_POST['edificio'] : 'citic'; 
         ?>
 
     </head>
@@ -121,7 +121,7 @@
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Addons</div>
-                            <a class="nav-link" href="charts.html">
+                            <a class="nav-link" href="contacto.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                 Contacto
                             </a>
@@ -146,7 +146,7 @@
                         </ol>
                         <!------------------------------------------------------------------------------------------------------------------------------------>
                         
-                        <form>
+                        <form action="#" method="POST">
 
                             <div class="row">
                                 <div class="col-xl-4 col-md-6">

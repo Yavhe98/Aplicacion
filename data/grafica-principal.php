@@ -1,8 +1,10 @@
 <?php
 
+session_start();
+
 $minDate = $_POST['minDate'] ;
 $maxDate = $_POST['maxDate'] ;
-$edificio = $_POST['edificio'];
+$edificio = $_SESSION['edificio'];
 $graficas = array();
 
 if(isset($_POST['consu'])){
@@ -93,10 +95,10 @@ if(in_array('consumo', $graficas)){
         }
       }
     }
-    elseif(count($consumo < 50)){
+    elseif(count($consumo) < 50){
       for($i=0; $i < count($consumo);$i++){
         $consumo_resumen[$i] = round($consumo[$i]);
-        $fechas[$i] = $fechas[$i];
+        $fechas_resumen[$i] = $fechas[$i];
       }
     }
   }
@@ -133,19 +135,19 @@ else{ # Consumo desactivado
   }
 }
 
-
-
 ?>
 
 <script>
 
-var fechas = <?php echo json_encode($fechas_resumen); ?>
+var fechas = <?php echo json_encode($fechas_resumen); ?>;
 
-var consumo = <?php echo json_encode($consumo_resumen); ?>
+var consumo = <?php echo json_encode($consumo_resumen); ?>;
 
-var generacion = <?php echo json_encode($generacion_resumen); ?>
+var edificio = <?php echo json_encode($edificio); ?>;
 
-var graficas = <?php echo json_encode($graficas); ?>
+var generacion = <?php echo json_encode($generacion_resumen); ?>;
+
+var graficas = <?php echo json_encode($graficas); ?>;
 
 function encontrarMaximo(array1, array2) {
   // Combina los dos arreglos en uno solo
@@ -173,6 +175,8 @@ Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSyste
 Chart.defaults.global.defaultFontColor = '#292b2c';
 
 var datos = [];
+
+console.log(edificio);
 
 if(graficas.includes('generacion') && graficas.includes('consumo')){
   maximo = encontrarMaximo(generacion, consumo);
