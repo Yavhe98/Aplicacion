@@ -99,21 +99,15 @@
 
                                 </nav>
                             </div>
-                            <div class="sb-sidenav-menu-heading">Addons</div>
+                            <div class="sb-sidenav-menu-heading">Asistencia</div>
                             <a class="nav-link" href="contacto.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                 Contacto
                             </a>
-                            <a class="nav-link" href="tables.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-info"></i></div>
-                                Acerca de
-                            </a>
+                            
                         </div>
                     </div>
-                    <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
-                        Start Bootstrap
-                    </div>
+                    
                 </nav>
             </div>
             <div id="layoutSidenav_content">
