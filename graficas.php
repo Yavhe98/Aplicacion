@@ -218,7 +218,7 @@
 
                         </script>
 
-
+<hr/>
                         <!-------------------------------------------------------------------------------------------------------------------------------------->
 
                         <div class="row">
@@ -243,7 +243,7 @@
                             $edificios = ["citic", "cmaximo", "instrumentacion", "mentecerebro", "politecnico", "politicas"];
 
                             foreach($edificios as $e){
-                                $consulta = "SELECT Nombre, Fecha, Consumo FROM datos_edificio JOIN $e USING(id) ORDER BY Consumo DESC LIMIT 50";
+                                $consulta = "SELECT Nombre, Fecha, Consumo FROM datos_edificio JOIN $e USING(id) ORDER BY Consumo DESC LIMIT 100";
                                 $lectura = mysqli_query($conn, $consulta);
                                 while($lecturas = $lectura -> fetch_array()){
                                     $nombres[] = $lecturas["Nombre"];
@@ -251,7 +251,7 @@
                                     $consumos[] = $lecturas["Consumo"];
                                 }
                                 
-                                $consulta = "SELECT Nombre, Fecha, Consumo FROM datos_edificio JOIN $e USING(id) ORDER BY Consumo ASC LIMIT 50";
+                                $consulta = "SELECT Nombre, Fecha, Consumo FROM datos_edificio JOIN $e USING(id) ORDER BY Consumo ASC LIMIT 100";
                                 $lectura = mysqli_query($conn, $consulta);
                                 while($lecturas = $lectura -> fetch_array()){
                                     $nombres[] = $lecturas["Nombre"];
@@ -266,7 +266,7 @@
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                Edificios que mas consumen
+                                Ranking de consumo
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
@@ -323,7 +323,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
-        <?php include("data/grafica-principal.php");?>
+        <?php include("graficas/grafica-principal.php");?>
         <?php //include("data/chart-bar-demo.php");?>
         
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>

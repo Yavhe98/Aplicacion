@@ -7,13 +7,9 @@ from datetime import datetime, date
 import sys
 import math
 
-if len(sys.argv) != 4:
-    print("Error: Se requieren tres parámetros. Usted ha proporcionado ", len(sys.argv)-1)
-    sys.exit(1)
-
-eficiencia = float(sys.argv[1])
-area = float(sys.argv[2])
-edificio = sys.argv[3]
+eficiencia = 22.24
+area = 2.16
+edificio = 'citic'
 
 eficiencia = eficiencia/ 100
 
@@ -50,91 +46,31 @@ conexion.close()"""
 
 # -------------------------------------------------------- FUNCIONES ----------------------------------------------------- #
 
-def seno_en_grados(angulo_grados):
-    angulo_radianes = np.radians(angulo_grados)
-    seno = np.sin(angulo_radianes)
-    return seno
-
-def coseno_en_grados(angulo_grados):
-    angulo_radianes = np.radians(angulo_grados)
-    coseno = np.cos(angulo_radianes)
-    return coseno
-
-# checked
-def calcular_distancia_tierra_sol(fecha):
-    # Convertir la fecha en formato 'yyyy-mm-dd' a día y mes
-    dia = fecha.day
-    mes = fecha.month
-
-    # Calcular el valor de θ (ángulo polar)
-    def calcular_theta(dia, mes):
-        # Calcular el número de días transcurridos desde el 1 de enero
-        dias_transcurridos = sum([31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30][:mes-1]) + dia
-
-        # Calcular la anomalía media (M)
-        M = 2 * math.pi * (dias_transcurridos - 182.5) / 365.24219
-
-        # Calcular la ecuación del tiempo (E)
-        K = 0.017202  # Constante para el número de días transcurridos desde el equinoccio vernal
-        E = K * seno_en_grados(2 * M) + 1.914 * seno_en_grados(M) + 0.02 * seno_en_grados(2 * M)
-
-        # Calcular el valor de θ
-        theta = M + E
-
-        return theta
-
-    # Calcular la distancia de la Tierra al Sol
-    def calcular_distancia(theta):
-        a = 149.6 * 10**6  # Semieje mayor de la órbita terrestre en kilómetros
-        e = 0.0167  # Excentricidad de la órbita terrestre
-
-        r = a * (1 - e**2) / (1 + e * coseno_en_grados(theta))
-        return r * 1000  # Convertir de kilómetros a metros
-
-    # Calcular θ para la fecha especificada
-    theta = calcular_theta(dia, mes)
-
-    # Calcular la distancia entre la Tierra y el Sol
-    distancia = calcular_distancia(theta)
-
-    return distancia
-
-
-# Ejemplo de uso
-#fecha = '2023-06-28'
-#distancia_tierra_sol = calcular_distancia_tierra_sol(fecha)
-#print("Distancia de la Tierra al Sol:", distancia_tierra_sol, "metros")
-
-# Función para calcular la radiación solar diaria extreaterrestre J/m^2/dia
-def radiacion_solar_diaria(s0, latitud, declinacion, h_sol):
-    radiacion_solar_diaria = s0 * 3600 * (seno_en_grados(90 - latitud + declinacion)) * (2 * h_sol / np.pi)
+# Función para calcular la radiación solar diaria extreaterrestre
+def radiacion_solar_diaria(s0, latitud, declinacion, horas_soleadas):
+    radianes_latitud = np.radians(latitud)
+    radiacion_solar_diaria = s0 * 3600 * (np.sin(np.radians(90 - radianes_latitud + declinacion))) * (2 * horas_soleadas / np.pi)
     return radiacion_solar_diaria
 
 # Funcion para calcular el parámetro solar S0
 def parametro_solar(dm, d):
     return 1367 * (dm/d)**2; # W/m^2
 
-"""# Funcion para calcular la distancia de la tierra al Sol en una fecha concreta
+# Funcion para calcular la distancia de la tierra al Sol en una fecha concreta
 # D es el número de días desde el 22 de marzo
 def distancia(fecha):
     f_inicial = date(fecha.year, 3, 22)
     D = (fecha - f_inicial).days
     #if D < 0
-    return (1.496*10**11) * (1-0.017 * np.sin(0.9856 * D)) # metros"""
+    return (1.496*10**11) * (1-0.017 * np.sin(0.9856 * D)) # cm
 
 # Función para calcular la declinación solar
-def declinacion_solar(fecha):
-    fecha_actual = datetime.combine(fecha, datetime.min.time())  # Convertir a objeto datetime
-    fecha_referencia = datetime(fecha.year, 1, 1)  # Fecha de referencia (22 de marzo)
-    dias_transcurridos = (fecha_actual - fecha_referencia).days
-    # Calcular la declinación solar
-    
-    return 23.45 * coseno_en_grados(360*(dias_transcurridos-172)/365)
+def declinacion_solar(dia_del_anio):
+    return 23.45 * np.sin(np.radians(360 * (284 + dia_del_anio) / 365))
 
 # Función de Hargreaves and Samani (HS) para calcular la radiación solar
-# being recommended the use of 0.16 and 0.19 in KT for inland and coastal locations, respectively
 def HS(Ra, Tx, Tn):
-    return 0.19*Ra*(np.sqrt(Tx-Tn))
+    return 0.0023*Ra*np.sqrt(Tx-Tn)
 
 
 # Función FINAL para calcular la energía generada por las placas
@@ -176,30 +112,26 @@ radiacion_solar = []
 radiacion_extraterrestre = []
 s0 = []
 distanciaT_S = []
+Ra_en_vatios = []
 dm = 1.490006 * 10**11   # Distancia media del sol a la tierra en metros
 latitud = 37.1774  # Latitud del lugar en grados
-Ra_en_vatios = []
 
-
-# Calculo de la distancia de la tierra al sol para cada día del año
 for f in fechas:
-    distanciaT_S.append(calcular_distancia_tierra_sol(f))
+    distanciaT_S.append(distancia(f))
 
-# Calculo del parámetro solar s0 para cada día del año
 for i in range(registros):
     s0.append(parametro_solar(dm,distanciaT_S[i]))
 
-# Cálculo de las radiacion_extraterrestre solares para cada día del año
+# Cálculo de las radiacion_extraterrestre solares diarias
 for i in range(registros):
-    radiacion_extraterrestre.append(radiacion_solar_diaria(s0[i], latitud, declinacion_solar(fechas[i]), horas_sol[i]))
+    radiacion_extraterrestre.append(radiacion_solar_diaria(s0[i], latitud, declinacion_solar(fechas[i].day),horas_sol[i]))
+
+for i in range(registros):
+    radiacion_solar.append(HS(radiacion_extraterrestre[i],tmax[i],tmin[i]))
 
 # Pasamos la radiacion_solar de J/m^2 dia a W/m^2
 for i in range(registros):
-    Ra_en_vatios.append(radiacion_extraterrestre[i] / (24 * 3600))
-
-# Caculo de la radiacion en un punto mediante la ecuación de HS y pasando los J/m^2 a MJ/m^2
-for i in range(registros):
-    radiacion_solar.append(HS(Ra_en_vatios[i],tmax[i],tmin[i]))
+    Ra_en_vatios.append(radiacion_solar[i] / (24 * 3600))
 
 # Hallar el número de paneles necesarios para cubrir la media de los 5 días con mayor consumo
 # Se calculará a partir de la media de los 5 días con mayor consumo, la eficiencia de la placa, el area y la media de radiación solar en granada
@@ -225,13 +157,7 @@ for i in range(registros):
 
 print(numero)
 
-
-
-
-
 conexion.commit()
 cursor.close()
 # Cerrar la conexión a la base de datos
 conexion.close()
-
-

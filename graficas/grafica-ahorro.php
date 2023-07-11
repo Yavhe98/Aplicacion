@@ -1,44 +1,53 @@
 <?php
 
-$coste = 0.34;  # €/kWh
+//session_start();
 
-$edificio = $_POST["edificio"];
-$paneles = $_POST["placas"];
+$edificio = $_SESSION["edificio"];
+$paneles = $_SESSION['paneles'];
+
+$year = $_POST["year"];
+$precio_total = $_POST["precio_instalacion"];
+$precio_energia = $_POST["precio_energia"];
 
 $consumo = array();
 $generacion = array();
 $ahorro = array();
 
+$ahorro[0] = -($precio_total);
+
 # Recoge la suma de consumo por mes del edificio seleccionado
-$consulta = "SELECT SUM(Consumo) AS 'consumo_medio' FROM $edificio WHERE YEAR(Fecha) = 2015 GROUP BY MONTH(Fecha)";
+$consulta = "SELECT SUM(Consumo) AS 'consumo_medio' FROM $edificio WHERE YEAR(Fecha) >= $year GROUP BY YEAR(Fecha), MONTH(Fecha) ORDER BY Fecha ASC LIMIT 12";
 $lectura = mysqli_query($conn, $consulta);
 while($lecturas = $lectura->fetch_array()){
   $consumo[] = $lecturas["consumo_medio"];
 }
 
-$consulta = "SELECT SUM(Generacion) AS 'generacion_media' FROM generacion WHERE YEAR(Fecha) = 2015 GROUP BY MONTH(Fecha)";
+$consulta = "SELECT SUM(Generacion) AS 'generacion_media' FROM generacion WHERE YEAR(Fecha) >= $year GROUP BY YEAR(Fecha), MONTH(Fecha) order by Fecha Asc limit 12;";
 $lectura = mysqli_query($conn, $consulta);
 while($lecturas = $lectura->fetch_array()){
-  $generacion[] = $lecturas["generacion_media"] * $paneles;
+  $generacion[] = $lecturas["generacion_media"];
 }
 
-$acumulado = 0;
-for($i = 0; $i < 12; $i++){
+$acumulado = $ahorro[0];
+
+// $acumulado += ($generacion[$i] > $consumo[$i]) ? ($consumo[$i] * $coste) : ($generacion[$i] * $coste);
+for($i = 1; $i < count($consumo); $i++){
   if($generacion[$i] > $consumo[$i]){
-    $acumulado += $consumo[$i] * $coste;
+    $acumulado += $consumo[$i] * $precio_energia;
     $ahorro[$i] = $acumulado;
   }
   else{
-    $acumulado += ($consumo[$i] - $generacion[$i])* $coste;
+    $acumulado +=  $generacion[$i]* $precio_energia;
     $ahorro[$i] = $acumulado;
   }
 }
 
 foreach ($ahorro as &$a) {
-  $a = round($a * $paneles, 2);
+  $a = round($a, 2);
 }
 
-$valor_maximo = ceil(max($ahorro)/1000000)*1000000;
+$valor_maximo = max($ahorro);
+$valor_minimo = min($ahorro);
 
 ?>
 
@@ -48,6 +57,8 @@ $valor_maximo = ceil(max($ahorro)/1000000)*1000000;
 var ahorro = <?php echo json_encode($ahorro); ?>
 
 var maximo = <?php echo json_encode($valor_maximo); ?>
+
+var minimo = <?php echo json_encode($valor_minimo); ?>
 
 // Set new default font family and font color to mimic Bootstrap's default styling
 Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
@@ -75,15 +86,15 @@ var myLineChart = new Chart(ctx, {
           unit: 'month'
         },
         gridLines: {
-          display: false
+          display: true
         },
         ticks: {
-          maxTicksLimit: 12
+          maxTicksLimit: 24
         }
       }],
       yAxes: [{
         ticks: {
-          min: 0,
+          min: minimo,
           max: maximo,
           maxTicksLimit: 5
         },

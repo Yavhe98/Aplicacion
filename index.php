@@ -36,10 +36,10 @@
                 var area = $('#area').val();
                 var edificio = $('#edificio').val();
                 document.querySelector('#prueba').classList.remove('d-none');
-                document.querySelector('.text').innerText='Buscando configuración más óptima';
+                document.querySelector('.text').innerText='Buscando configuración más óptima...';
                 $.ajax({
                     type: 'POST',
-                    url: 'ejecutar_generacion.php',
+                    url: 'utils/ejecutar_generacion.php',
                     data: {
                         eficiencia: eficiencia,
                         area: area,
@@ -56,7 +56,7 @@
     </script>
 
 
-    <body class="sb-nav-fixed" style="background-image: url('assets/img/pantalla_inicio.jpg'); background-size: cover; background-repeat: no-repeat;">
+    <body class="sb-nav-fixed" style="background-image: url('img/pantalla_inicio.jpg'); background-size: cover; background-repeat: no-repeat;">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
             <a class="navbar-brand ps-3" href="index.php">Energía Renovable</a>
@@ -147,7 +147,7 @@
                                     <div class="card bg-primary text-white mb-4">
                                         <div class="card-body">Area del panel</div>
                                         <div class="card-footer d-flex align-items-center justify-content-between">
-                                            <input type="number" name="area" id="area" step="0.1" value=1.50 required>
+                                            <input type="number" name="area" id="area" step="0.01" value=2.16 required>
                                         </div>
                                     </div>
                                 </div>
@@ -156,7 +156,7 @@
                                     <div class="card bg-warning text-white mb-4">
                                         <div class="card-body">Eficiencia del panel</div>
                                         <div class="card-footer d-flex align-items-center justify-content-between">
-                                            <input type="number" name="eficiencia" id="eficiencia" step="1"value=20 required>
+                                            <input type="number" name="eficiencia" id="eficiencia" step="0.01"value=22.24 required>
                                         </div>
                                     </div>
                                 </div>
@@ -185,7 +185,7 @@
                                         </div>
                                     </div>
                                     <div id='prueba' class='d-none'>
-                                        <img src="/assets/img/charging.gif" alt="" width='10%'>
+                                        <img src="img/charging.gif" alt="" width='10%'>
                                         <p class='text'></p>
                                     </div>
                                 </center>

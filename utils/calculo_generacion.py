@@ -7,9 +7,13 @@ from datetime import datetime, date
 import sys
 import math
 
-eficiencia = 22.24
-area = 2.16
-edificio = 'instrumentacion'
+if len(sys.argv) != 4:
+    print("Error: Se requieren tres parámetros. No", len(sys.argv)-1)
+    sys.exit(1)
+
+eficiencia = float(sys.argv[1])
+area = float(sys.argv[2])
+edificio = sys.argv[3]
 
 eficiencia = eficiencia/ 100
 
@@ -157,7 +161,7 @@ for fila in aemet:
 
 #consulta = "SELECT AVG(TotalConsumo) FROM (SELECT DATE(Fecha) AS Fecha, SUM(Consumo) AS TotalConsumo FROM citic GROUP BY DATE(Fecha) ORDER BY TotalConsumo DESC LIMIT 20) AS subconsulta;"
 
-consulta = "SELECT MAX(consumo_mes) FROM (SELECT SUM(consumo) as consumo_mes FROM " + edificio + " WHERE YEAR(Fecha)='2016' GROUP BY MONTH(Fecha) ) AS subconsulta;"
+consulta = "SELECT MAX(consumo_mes) FROM(SELECT SUM(consumo) as consumo_mes, Fecha FROM	" + edificio + " GROUP BY YEAR(Fecha), MONTH(Fecha) ) AS subconsulta;"
 
 cursor.execute(consulta)
 consumo = cursor.fetchall()
@@ -199,18 +203,18 @@ for i in range(registros):
 
 # Hallar el número de paneles necesarios para cubrir la media de los 5 días con mayor consumo
 # Se calculará a partir de la media de los 5 días con mayor consumo, la eficiencia de la placa, el area y la media de radiación solar en granada
-consulta = "SELECT MAX(area) FROM datos_edificio JOIN " + edificio + " USING(id);"
+consulta = "SELECT DISTINCT(area) FROM datos_edificio JOIN " + edificio + " USING(id);"
 
 cursor.execute(consulta)
-area_panel = cursor.fetchone()
-area_panel = area_panel[0]
+area_edificio = cursor.fetchone()
+area_edificio=area_edificio[0]
 media_ra = np.mean(Ra_en_vatios)*30
 numero = int(math.ceil(consumo / (media_ra * eficiencia * area)))
 
 
-# No cane todos los paneles
-if(numero * area > area_panel):
-    numero_real = math.floor(area_panel/area)
+# No caben todos los paneles
+if(numero * area > area_edificio):
+    numero_real = math.floor(area_edificio/area)
     for i in range(registros):
         generaciones.append( numero_real * (generacion(Ra_en_vatios[i],area,eficiencia)) )
 else:
@@ -241,5 +245,4 @@ conexion.commit()
 cursor.close()
 # Cerrar la conexión a la base de datos
 conexion.close()
-
 

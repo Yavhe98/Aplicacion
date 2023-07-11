@@ -1,6 +1,6 @@
 <?php
 
-session_start();
+//session_start();
 
 $minDate = $_POST['minDate'] ;
 $maxDate = $_POST['maxDate'] ;
@@ -269,7 +269,7 @@ var myLineChart = new Chart(ctx, {
           unit: 'date'
         },
         gridLines: {
-          display: false
+          display: true
         },
         ticks: {
           maxTicksLimit: 15
